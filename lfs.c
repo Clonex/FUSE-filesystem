@@ -10,21 +10,36 @@ int lfs_open( const char *, struct fuse_file_info * );
 int lfs_read( const char *, char *, size_t, off_t, struct fuse_file_info * );
 int lfs_release(const char *path, struct fuse_file_info *fi);
 
+static struct node {
+	char[] name;
+	bool isFolder;
+	void* data;
+	godNode attributes;
+} node;
+
+static struct godNode {
+	int size;
+	int time;
+	char access; // read, write, execute permissions
+} godNode;
+
 static struct fuse_operations lfs_oper = {
-	.getattr	= lfs_getattr,
-	.readdir	= lfs_readdir,
-	.mknod = NULL,
-	.mkdir = NULL,
-	.unlink = NULL,
-	.rmdir = NULL,
-	.truncate = NULL,
-	.open	= lfs_open,
-	.read	= lfs_read,
-	.release = lfs_release,
-	.write = NULL,
-	.rename = NULL,
+	.getattr	= lfs_getattr,	// Get a attribute
+	.readdir	= lfs_readdir,	//	
+	.mknod = NULL,				// Make a file
+	.mkdir = NULL,				// Make a directory
+	.unlink = NULL,				// Remove file
+	.rmdir = NULL,				// Rename folder
+	.truncate = NULL,			// Empty a file
+	.open	= lfs_open,			// Opens a 
+	.read	= lfs_read,			// Reads a 
+	.release = lfs_release,		// Closes a 
+	.write = NULL,			
+	.rename = NULL,				
 	.utime = NULL
 };
+
+node root_fs;
 
 int lfs_getattr( const char *path, struct stat *stbuf ) {
 	int res = 0;
@@ -77,7 +92,8 @@ int lfs_release(const char *path, struct fuse_file_info *fi) {
 }
 
 int main( int argc, char *argv[] ) {
+	root_fs = kmalloc(node);
+	printf("fuck um");
 	fuse_main( argc, argv, &lfs_oper );
-
 	return 0;
 }
