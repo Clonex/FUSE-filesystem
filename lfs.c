@@ -53,14 +53,10 @@ int lfs_getattr( const char *path, struct stat *stbuf ) {
 	if( strcmp( path, "/" ) == 0 ) {
 		stbuf->st_mode = S_IFDIR | 0755;
 		stbuf->st_nlink = 2;
-	} else if( strcmp( path, "/hello" ) == 0 ) {
+	} else if( strcmp( path, "folder" ) == 0 ) {
 		stbuf->st_mode = S_IFREG | 0777;
-		stbuf->st_nlink = 1;
-		stbuf->st_size = 12;
-	} else if( strcmp( path, "/test" ) == 0 ) {
-		stbuf->st_mode = S_IFREG | 0444;
-		stbuf->st_nlink = 1;
-		stbuf->st_size = strlen("/test");
+		stbuf->st_nlink = 2;
+		stbuf->st_size = strlen("folder");
 	} else
 		res = -ENOENT;
 
@@ -78,13 +74,9 @@ int lfs_readdir( const char *path, void *buf, fuse_fill_dir_t filler, off_t offs
 	filler(buf, ".", NULL, 0);
 	filler(buf, "..", NULL, 0);
 	filler(buf, "test", NULL, 0);
+	filler(buf, "folder", NULL, 0);
 
 	
-	filler(buf, ".", NULL, 0);
-	filler(buf, "..", NULL, 0);
-	filler(buf, "/hello", NULL, 0);
-	filler(buf, "/hello/.", NULL, 0);
-	filler(buf, "/hello/..", NULL, 0);
 
 	return 0;
 }
