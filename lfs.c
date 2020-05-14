@@ -3,6 +3,8 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h> 
+
 
 int lfs_getattr( const char *, struct stat * );
 int lfs_readdir( const char *, void *, fuse_fill_dir_t, off_t, struct fuse_file_info * );
@@ -10,18 +12,20 @@ int lfs_open( const char *, struct fuse_file_info * );
 int lfs_read( const char *, char *, size_t, off_t, struct fuse_file_info * );
 int lfs_release(const char *path, struct fuse_file_info *fi);
 
-static struct node {
-	char name[];
-	bool isFolder;
-	void* data;
-	godNode attributes;
-} node;
-
 static struct godNode {
 	int size;
 	int time;
 	char access; // read, write, execute permissions
 } godNode;
+
+static struct node {
+	bool isFolder;
+	void* data;
+	struct godNode attributes;
+	char name[];
+} node;
+
+
 
 static struct fuse_operations lfs_oper = {
 	.getattr	= lfs_getattr,	// Get a attribute
@@ -39,7 +43,7 @@ static struct fuse_operations lfs_oper = {
 	.utime = NULL
 };
 
-node root_fs;
+struct node root_fs;
 
 int lfs_getattr( const char *path, struct stat *stbuf ) {
 	int res = 0;
