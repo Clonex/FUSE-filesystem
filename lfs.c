@@ -83,7 +83,7 @@ int lfs_readdir( const char *path, void *buf, fuse_fill_dir_t filler, off_t offs
 	filler(buf, ".", NULL, 0);
 	filler(buf, "..", NULL, 0);
 	filler(buf, "/hello", NULL, 0);
-	//filler(buf, "/hello/.", NULL, 0);
+	filler(buf, "/hello/.", NULL, 0);
 
 	return 0;
 }
