@@ -43,7 +43,7 @@ static struct fuse_operations lfs_oper = {
 	.utime = NULL
 };
 
-struct node root_fs;
+struct node* root_fs;
 
 int lfs_getattr( const char *path, struct stat *stbuf ) {
 	int res = 0;
@@ -74,6 +74,8 @@ int lfs_readdir( const char *path, void *buf, fuse_fill_dir_t filler, off_t offs
 	filler(buf, ".", NULL, 0);
 	filler(buf, "..", NULL, 0);
 	filler(buf, "hello", NULL, 0);
+	filler(buf, "/hello", NULL, 0);
+	//filler(buf, "/hello/.", NULL, 0);
 
 	return 0;
 }
@@ -97,7 +99,6 @@ int lfs_release(const char *path, struct fuse_file_info *fi) {
 
 int main( int argc, char *argv[] ) {
 	root_fs = malloc(sizeof(struct node));
-	printf("fuck um");
 	fuse_main( argc, argv, &lfs_oper );
 	return 0;
 }
