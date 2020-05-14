@@ -96,7 +96,7 @@ int lfs_release(const char *path, struct fuse_file_info *fi) {
 }
 
 int main( int argc, char *argv[] ) {
-	root_fs = malloc(sizeof(node));
+	root_fs = malloc(sizeof(struct node));
 	printf("fuck um");
 	fuse_main( argc, argv, &lfs_oper );
 	return 0;
