@@ -53,10 +53,10 @@ int lfs_getattr( const char *path, struct stat *stbuf ) {
 	if( strcmp( path, "/" ) == 0 ) {
 		stbuf->st_mode = S_IFDIR | 0755;
 		stbuf->st_nlink = 2;
-	} else if( strcmp( path, "folder" ) == 0 ) {
-		stbuf->st_mode = S_IFREG | 0777;
+	} else if( strcmp( path, "/folder" ) == 0 ) {
+		stbuf->st_mode = S_IFREG | 0755;
 		stbuf->st_nlink = 2;
-		stbuf->st_size = strlen("folder");
+		stbuf->st_size = 150;
 	} else
 		res = -ENOENT;
 
