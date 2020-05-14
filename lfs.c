@@ -11,7 +11,7 @@ int lfs_read( const char *, char *, size_t, off_t, struct fuse_file_info * );
 int lfs_release(const char *path, struct fuse_file_info *fi);
 
 static struct node {
-	char[] name;
+	char name[];
 	bool isFolder;
 	void* data;
 	godNode attributes;
@@ -92,7 +92,7 @@ int lfs_release(const char *path, struct fuse_file_info *fi) {
 }
 
 int main( int argc, char *argv[] ) {
-	root_fs = kmalloc(node);
+	root_fs = malloc(sizeof(node));
 	printf("fuck um");
 	fuse_main( argc, argv, &lfs_oper );
 	return 0;
