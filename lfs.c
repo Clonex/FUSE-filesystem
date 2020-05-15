@@ -1,3 +1,4 @@
+#include <fuse.h>
 #include "lfs.h" 
 #include "implementation.c" 
 
@@ -90,6 +91,22 @@ int main( int argc, char *argv[] ) {
 	}
 	root_fs->type = TYPE_DIR;
 	root_fs->access = ACCESS_READ_WRITE;
+
+	root_fs->type = TYPE_DIR;
+	root_fs->access = ACCESS_READ_WRITE;
+
+    root_fs->size = sizeof(entry) * DEFAULT_DIR_SIZE;
+    root_fs->data = calloc(DEFAULT_DIR_SIZE, sizeof(entry));
+    if(root_fs->data == NULL)
+    {
+        return -1; // TODO: error
+    }
+    entry *data = (entry *) root_fs->data;
+    for(int i = 0; i < DEFAULT_DIR_SIZE; i++)
+    {
+        data[i].type = TYPE_BLANK;
+		data[i].name = "";
+    }
 
 	fuse_main( argc, argv, &lfs_oper );
 	return 0;

@@ -22,6 +22,7 @@ int createEntry(const char *path, int type)
         for(int i = 0; i < DEFAULT_DIR_SIZE; i++)
         {
             data[i].type = TYPE_BLANK;
+            data[i].name = "";
         }
     }else{
         file->size = 0;
@@ -30,9 +31,12 @@ int createEntry(const char *path, int type)
     time(&stamp);
     file->time = stamp;
     file->type = type;
-
   
     char **pathArr = splitString(path, '/');
+    if(pathArr == NULL)
+    {
+        return -1; // TODO: error
+    }
     size_t length = sizeof(pathArr) / sizeof(pathArr[0]);
     file->name = pathArr[length - 1]; 
     file->access = ACCESS_READ_WRITE;
@@ -58,14 +62,15 @@ entry* findDir(char **pathArr, entry* folder){
     if(length == 2){
         return folder;
     }
-
+    
     entry *currentEntry = folder;
     for(int pathI = 0; pathI < length; pathI++){
         for(int fileI = 0; fileI < DEFAULT_DIR_SIZE; fileI++){
             entry *file = (entry *) currentEntry->data;
-            if(strcmp(file[fileI].name, pathArr[pathI]) == 0)
+            if(file[fileI].type == TYPE_DIR && strcmp(file[fileI].name, pathArr[pathI]) == 0)
             {
                 currentEntry = &file[fileI];
+                fileI = DEFAULT_DIR_SIZE; // Next path
             }
         }
     }
@@ -77,28 +82,36 @@ entry* findDir(char **pathArr, entry* folder){
  */
 char **splitString(const char *input, char delimiter){
     int count = 0;
-    for(int i = 0; i < sizeof(input); i++)
-    {
-        if(strcmp(&input[i], &delimiter) == 0)
-        {
-            count++;
-        }
-    }
-
+    int j = 0;
     char **out = calloc(count, sizeof(char *));
     if(out == NULL)
     {
         return NULL;
     }
+    for(int i = 0; i < strlen(input); i++)
+    {
+        if(input[i] == delimiter)
+        {
+            out[count] = calloc((i - j), sizeof(char));
+            if(out[count] == NULL)
+            {
+                return NULL;
+            }
+            count++;
+            j = i;
+        }
+    }
+    out[count] = calloc(((strlen(input) - 1) - j), sizeof(char));
 
     int target = 0;
-    for(int i = 0; i < sizeof(input); i++)
+    for(int i = 0; i < strlen(input); i++)
     {
-        if(strcmp(&input[i], &delimiter) == 0)
+        if(input[i] == delimiter)
         {
             target++;
+            continue;
         }
-        out[target] = strcat(out[target], &input[i]);
+        sprintf(out[target], "%s%c", out[target], input[i]);
     }
     return out;
 }

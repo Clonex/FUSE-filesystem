@@ -11,6 +11,9 @@ CFLAGS = -O2 -Wall -D_FILE_OFFSET_BITS=64 -DFUSE_USE_VERSION=25
 LIBS := fuse 
 LIBS := $(addprefix -l,$(LIBS))
 
+test:
+	gcc test.c -o test
+
 all: lfs
 
 %.o: %.c
@@ -20,4 +23,4 @@ lfs: $(OBJS)
 	$(GCC) $(OBJS) $(LIBS) $(CFLAGS) -o lfs
 
 clean:
-	rm -f $(OBJS) lfs
+	rm -f $(OBJS) test lfs
