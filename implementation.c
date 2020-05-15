@@ -18,7 +18,7 @@ int createEntry(const char *path, int type)
         for(int i = 0; i < DEFAULT_DIR_SIZE; i++)
         {
             entry temp = data[i];
-            temp->type = TYPE_BLANK;
+            temp.type = TYPE_BLANK;
         }
     }else{
         file->size = 0;

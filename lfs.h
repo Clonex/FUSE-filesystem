@@ -24,5 +24,5 @@ typedef struct entry {
 	int size;
 	time_t time;
 	char access; // read, write, read/write, execute permissions
-	char name[];
+	char *name;
 } entry;
