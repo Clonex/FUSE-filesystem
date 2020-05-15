@@ -2,7 +2,7 @@
 
 int createEntry(const char *path, int type)
 {
-    entry file = calloc(1, sizeof(entry));
+    entry *file = calloc(1, sizeof(entry));
     if(file == NULL){
         return -1; // TODO error
     }

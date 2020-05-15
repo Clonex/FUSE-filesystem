@@ -20,9 +20,9 @@
 typedef struct entry {
 	int type;
 	void* data;
-	char name[];
 
 	int size;
 	time_t time;
 	char access; // read, write, read/write, execute permissions
+	char name[];
 } entry;
