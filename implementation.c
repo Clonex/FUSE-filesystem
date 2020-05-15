@@ -14,9 +14,10 @@ int createEntry(const char *path, int type)
         {
             return -1; // TODO: error
         }
+        entry *data = (entry *) file->data;
         for(int i = 0; i < DEFAULT_DIR_SIZE; i++)
         {
-            entry *temp = (entry *) file->data[i];
+            entry temp = data[i];
             temp->type = TYPE_BLANK;
         }
     }else{
@@ -35,11 +36,10 @@ int createEntry(const char *path, int type)
     entry *targetDir = findDir(name, root_fs);
     for(int i = 0; i < DEFAULT_DIR_SIZE; i++)
     {
-        entry *temp = (entry *) targetDir->data[i];
-        if(temp->type == TYPE_BLANK)
+        entry *data = (entry *) targetDir->data;
+        if(data[i]->type == TYPE_BLANK)
         {
-            ((entry *) targetDir->data[i]) = file;
-            //temp = file;
+            data[i] = file;
             break;
         }
     }
