@@ -1,5 +1,5 @@
 entry* findDir(char **pathArr, entry* folder);
-
+char **splitString(char *input, char *delimiter);
 
 /*
  * Adds a entry to the correct folder.
