@@ -1,5 +1,5 @@
 entry* findDir(char **pathArr, entry* folder);
-char **splitString(char *input, char *delimiter);
+char **splitString(char *input, char delimiter);
 
 /*
  * Adds a entry to the correct folder.
@@ -88,7 +88,7 @@ char **splitString(const char *input, char delimiter){
     char **out = calloc(count, sizeof(char *));
     if(out == NULL)
     {
-        return -1; // TODO error
+        return NULL;
     }
 
     int target = 0;
