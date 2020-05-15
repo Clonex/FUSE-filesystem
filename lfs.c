@@ -1,10 +1,5 @@
-#include <fuse.h>
-#include <errno.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h> 
-
+#include "lfs.h" 
+#include "implementation.c" 
 
 int lfs_getattr( const char *, struct stat * );
 int lfs_readdir( const char *, void *, fuse_fill_dir_t, off_t, struct fuse_file_info * );
@@ -12,25 +7,11 @@ int lfs_open( const char *, struct fuse_file_info * );
 int lfs_read( const char *, char *, size_t, off_t, struct fuse_file_info * );
 int lfs_release(const char *path, struct fuse_file_info *fi);
 
-static struct godNode {
-	int size;
-	int time;
-	char access; // read, write, execute permissions
-} godNode;
-
-static struct node {
-	bool isFolder;
-	void* data;
-	struct godNode attributes;
-	char name[];
-} node;
-
-
 
 static struct fuse_operations lfs_oper = {
 	.getattr	= lfs_getattr,	// Get a attribute
 	.readdir	= lfs_readdir,	//	
-	.mknod = NULL,				// Make a file
+	.mknod = lfs_makefile,				// Make a file
 	.mkdir = NULL,				// Make a directory
 	.unlink = NULL,				// Remove file
 	.rmdir = NULL,				// Rename folder
@@ -43,7 +24,11 @@ static struct fuse_operations lfs_oper = {
 	.utime = NULL
 };
 
-struct node* root_fs;
+entry* root_fs[DEFAULT_DIR_SIZE];
+
+int lfs_makefile(const char *path, mode_t mode, dev_t device){
+	return createEntry(path, TYPE_FILE);
+}
 
 int lfs_getattr( const char *path, struct stat *stbuf ) {
 	int res = 0;
@@ -57,8 +42,9 @@ int lfs_getattr( const char *path, struct stat *stbuf ) {
 		stbuf->st_mode = S_IFREG | 0755;
 		stbuf->st_nlink = 1;
 		stbuf->st_size = 150;
-	} else
+	} else {
 		res = -ENOENT;
+	}
 
 	return res;
 }
@@ -99,7 +85,7 @@ int lfs_release(const char *path, struct fuse_file_info *fi) {
 }
 
 int main( int argc, char *argv[] ) {
-	root_fs = malloc(sizeof(struct node));
+	//root_fs = malloc(sizeof(struct file));
 	fuse_main( argc, argv, &lfs_oper );
 	return 0;
 }
