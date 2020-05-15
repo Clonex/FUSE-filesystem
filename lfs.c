@@ -6,7 +6,7 @@ int lfs_readdir( const char *, void *, fuse_fill_dir_t, off_t, struct fuse_file_
 int lfs_open( const char *, struct fuse_file_info * );
 int lfs_read( const char *, char *, size_t, off_t, struct fuse_file_info * );
 int lfs_release(const char *path, struct fuse_file_info *fi);
-
+int lfs_makefile(const char *path, mode_t mode, dev_t device);
 
 static struct fuse_operations lfs_oper = {
 	.getattr	= lfs_getattr,	// Get a attribute
@@ -91,7 +91,7 @@ int main( int argc, char *argv[] ) {
 	}
 	root_fs->type = TYPE_DIR;
 	root_fs->access = ACCESS_READ_WRITE;
-	
+
 	fuse_main( argc, argv, &lfs_oper );
 	return 0;
 }

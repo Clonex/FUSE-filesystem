@@ -56,9 +56,9 @@ entry* findDir(char *pathArr, entry* folder){
     for(int pathI = 0; pathI < length; pathI++){
         for(int fileI = 0; fileI < DEFAULT_DIR_SIZE; fileI++){
             entry *file = (entry *) currentEntry->data;
-            if(strcomp(file[fileI]->name, pathArr[pathI]) == 0)
+            if(strcomp(file[fileI].name, pathArr[pathI]) == 0)
             {
-                currentEntry = file[fileI];
+                currentEntry = *file[fileI];
             }
         }
     }
