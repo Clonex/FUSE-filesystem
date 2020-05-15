@@ -1,4 +1,4 @@
-entry* findDir(char *pathArr, entry* folder);
+entry* findDir(char **pathArr, entry* folder);
 
 
 /*
