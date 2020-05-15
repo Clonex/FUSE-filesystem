@@ -1,3 +1,4 @@
+entry* findDir(char *pathArr, entry* folder);
 
 int createEntry(const char *path, int type)
 {
