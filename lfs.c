@@ -24,7 +24,6 @@ static struct fuse_operations lfs_oper = {
 	.utime = NULL
 };
 
-entry* root_fs[DEFAULT_DIR_SIZE];
 
 int lfs_makefile(const char *path, mode_t mode, dev_t device){
 	return createEntry(path, TYPE_FILE);
@@ -85,7 +84,14 @@ int lfs_release(const char *path, struct fuse_file_info *fi) {
 }
 
 int main( int argc, char *argv[] ) {
-	//root_fs = malloc(sizeof(struct file));
+	root_fs = malloc(sizeof(struct entry));
+	if(root_fs == NULL)
+	{
+		return -1; // TODO error
+	}
+	root_fs->type = TYPE_DIR;
+	root_fs->access = ACCESS_READ_WRITE;
+	
 	fuse_main( argc, argv, &lfs_oper );
 	return 0;
 }

@@ -26,3 +26,5 @@ typedef struct entry {
 	char access; // read, write, read/write, execute permissions
 	char *name;
 } entry;
+
+entry* root_fs;

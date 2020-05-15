@@ -1,5 +1,4 @@
 
-
 int createEntry(const char *path, int type)
 {
     entry *file = calloc(1, sizeof(entry));
@@ -37,9 +36,9 @@ int createEntry(const char *path, int type)
     for(int i = 0; i < DEFAULT_DIR_SIZE; i++)
     {
         entry *data = (entry *) targetDir->data;
-        if(data[i]->type == TYPE_BLANK)
+        if(data[i].type == TYPE_BLANK)
         {
-            data[i] = file;
+            data[i] = *file;
             break;
         }
     }
