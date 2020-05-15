@@ -32,7 +32,7 @@ int createEntry(const char *path, int type)
     file->type = type;
 
   
-    char **pathArr = splitString(path, "/");
+    char **pathArr = splitString(path, '/');
     size_t length = sizeof(pathArr) / sizeof(pathArr[0]);
     file->name = pathArr[length - 1]; 
     file->access = ACCESS_READ_WRITE;
@@ -98,7 +98,7 @@ char **splitString(const char *input, char delimiter){
         {
             target++;
         }
-        out[target] = strcat(out[target], input[i]);
+        out[target] = strcat(out[target], &input[i]);
     }
     return out;
 }
