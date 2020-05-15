@@ -24,7 +24,6 @@ static struct fuse_operations lfs_oper = {
 	.utime = NULL
 };
 
-
 int lfs_makefile(const char *path, mode_t mode, dev_t device){
 	return createEntry(path, TYPE_FILE);
 }

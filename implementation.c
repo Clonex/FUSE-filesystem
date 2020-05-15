@@ -1,5 +1,9 @@
 entry* findDir(char *pathArr, entry* folder);
 
+
+/*
+ * Adds a entry to the correct folder.
+ */
 int createEntry(const char *path, int type)
 {
     entry *file = calloc(1, sizeof(entry));
@@ -17,8 +21,7 @@ int createEntry(const char *path, int type)
         entry *data = (entry *) file->data;
         for(int i = 0; i < DEFAULT_DIR_SIZE; i++)
         {
-            entry temp = data[i];
-            temp.type = TYPE_BLANK;
+            data[i].type = TYPE_BLANK;
         }
     }else{
         file->size = 0;
@@ -28,12 +31,13 @@ int createEntry(const char *path, int type)
     file->time = stamp;
     file->type = type;
 
-    char *name = strtok(path, "/");
-    size_t length = sizeof(name) / sizeof(name[0]);
-    file->name = name[length - 1]; 
+  
+    char **pathArr = splitString(path, "/");
+    size_t length = sizeof(pathArr) / sizeof(pathArr[0]);
+    file->name = pathArr[length - 1]; 
     file->access = ACCESS_READ_WRITE;
 
-    entry *targetDir = findDir(name, root_fs);
+    entry *targetDir = findDir(pathArr, root_fs);
     for(int i = 0; i < DEFAULT_DIR_SIZE; i++)
     {
         entry *data = (entry *) targetDir->data;
@@ -46,7 +50,10 @@ int createEntry(const char *path, int type)
     return 0;
 }
 
-entry* findDir(char *pathArr, entry* folder){
+/*
+ * Finds the correct entry for a given path.
+ */
+entry* findDir(char **pathArr, entry* folder){
     size_t length = sizeof(pathArr) / sizeof(pathArr[0]);
     if(length == 2){
         return folder;
@@ -56,11 +63,42 @@ entry* findDir(char *pathArr, entry* folder){
     for(int pathI = 0; pathI < length; pathI++){
         for(int fileI = 0; fileI < DEFAULT_DIR_SIZE; fileI++){
             entry *file = (entry *) currentEntry->data;
-            if(strcomp(file[fileI].name, pathArr[pathI]) == 0)
+            if(strcmp(file[fileI].name, pathArr[pathI]) == 0)
             {
                 currentEntry = &file[fileI];
             }
         }
     }
     return currentEntry;
+}
+
+/*
+ * @returns a array of char array
+ */
+char **splitString(char *input, char *delimiter){
+    int count = 0;
+    for(int i = 0; i < sizeof(input); i++)
+    {
+        if(strcmp(input[i], delimiter) == 0)
+        {
+            count++;
+        }
+    }
+
+    char **out = calloc(count, sizeof(char *));
+    if(out == NULL)
+    {
+        return -1; // TODO error
+    }
+
+    int target = 0;
+    for(int i = 0; i < sizeof(input); i++)
+    {
+        if(strcmp(input[i], delimiter) == 0)
+        {
+            target++;
+        }
+        out[target] = strcat(out[target], input[i]);
+    }
+    return out;
 }
