@@ -75,11 +75,11 @@ entry* findDir(char **pathArr, entry* folder){
 /*
  * @returns a array of char array
  */
-char **splitString(char *input, char *delimiter){
+char **splitString(const char *input, char delimiter){
     int count = 0;
     for(int i = 0; i < sizeof(input); i++)
     {
-        if(strcmp(input[i], delimiter) == 0)
+        if(strcmp(&input[i], &delimiter) == 0)
         {
             count++;
         }
@@ -94,7 +94,7 @@ char **splitString(char *input, char *delimiter){
     int target = 0;
     for(int i = 0; i < sizeof(input); i++)
     {
-        if(strcmp(input[i], delimiter) == 0)
+        if(strcmp(&input[i], &delimiter) == 0)
         {
             target++;
         }
