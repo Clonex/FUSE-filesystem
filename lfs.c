@@ -42,6 +42,12 @@ int lfs_getattr( const char *path, struct stat *stbuf ) {
 		char **tempPath = splitString(path, '/');
 		size_t length = sizeof(tempPath) / sizeof(tempPath[0]);
 		char *fileName = tempPath[length - 1];
+		printf("tempPath.length = %d\n", length);
+		for(int a = 0; a < length; a++)
+		{
+			printf("\"%s\", \n", tempPath[a]);
+		}
+		
 		printf("Searching for file: %s\n", fileName);
 		entry *dir = findDir(tempPath, root_fs);
 		entry *files = (entry *) dir->data;
