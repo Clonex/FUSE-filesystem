@@ -33,6 +33,7 @@ int main()
 	{
 		return -1; // TODO error
 	}
+	root_fs->name = "root";
 	root_fs->type = TYPE_DIR;
 	root_fs->access = ACCESS_READ_WRITE;
 
@@ -57,12 +58,29 @@ int main()
         /mappe
         /mappe/fil.txt
     */
-    char **filTest = splitString("/hej.txt", '/');
+    
+    /*char **filTest = splitString("/hej.txt", '/');
     printf("fil1 Length = %d\n", count(filTest));
     printArr(filTest);
 
     char **filTest2 = splitString("/mappe", '/');
     printf("Length = %d\n", count(filTest2));
-    printArr(filTest2);
+    printArr(filTest2);*/
+
+    createEntry("/mappe", TYPE_DIR);
+    createEntry("/mappe/hej.txt", TYPE_FILE);
+
+    char *path = "/mappe";
+    char **tempPath = splitString(path, '/');
+	printArr(tempPath);
+	entry *dir = findDir(tempPath, root_fs);
+    printf("name = %s\n\n", dir->name);
+
+    entry *files = (entry *) dir->data;
+	for(int fileI = 0; fileI < DEFAULT_DIR_SIZE; fileI++){
+		if(files[fileI].type != TYPE_BLANK){
+			printf("file: %s\n", files[fileI].name);
+		}
+	}
     //printf("%d\n", test);//a
 }

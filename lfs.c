@@ -112,10 +112,12 @@ int lfs_readdir( const char *path, void *buf, fuse_fill_dir_t filler, off_t offs
 	char **tempPath = splitString(path, '/');
 	printArr(tempPath);
 	entry *dir = findDir(tempPath, root_fs);
+	printf("name = %s\n\n", dir->name);
 	entry *files = (entry *) dir->data;
 	for(int fileI = 0; fileI < DEFAULT_DIR_SIZE; fileI++){
 		if(files[fileI].type != TYPE_BLANK){
 			filler(buf, files[fileI].name, NULL, 0);
+			printf("file: %s\n", files[fileI].name);
 		}
 	}
 	

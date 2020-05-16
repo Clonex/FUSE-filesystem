@@ -65,16 +65,22 @@ int createEntry(const char *path, int type)
  */
 entry* findDir(char **pathArr, entry* folder){
     size_t length = getLength(pathArr);
-    
+
+    printf("Checking dir..\n");
     entry *currentEntry = folder;
     for(int pathI = 0; pathI < length; pathI++){
+        printf("Current dir: %s\n", currentEntry->name);
+        printf("Current path: %s\n", pathArr[pathI]);
+
         for(int fileI = 0; fileI < DEFAULT_DIR_SIZE; fileI++){
             entry *file = (entry *) currentEntry->data;
             if(file[fileI].type == TYPE_DIR && strcmp(file[fileI].name, pathArr[pathI]) == 0){
                 currentEntry = &file[fileI];
-                fileI = DEFAULT_DIR_SIZE; // Next path
+                printf("New folder: %s\n", currentEntry->name);
+                break; // Next path
             }
         }
+        printf("\n");
     }
     return currentEntry;
 }
