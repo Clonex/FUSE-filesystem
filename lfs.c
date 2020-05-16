@@ -37,12 +37,26 @@ int lfs_getattr( const char *path, struct stat *stbuf ) {
 	if( strcmp( path, "/" ) == 0 ) {
 		stbuf->st_mode = S_IFDIR | 0755;
 		stbuf->st_nlink = 2;
-	} else if( strcmp( path, "." ) != 0 && strcmp( path, ".." ) != 0 ) {
-		stbuf->st_mode = S_IFREG | 0755;
-		stbuf->st_nlink = 1;
-		stbuf->st_size = 150;
 	} else {
-		res = -ENOENT;
+		bool wasFound = false;
+		char **tempPath = splitString(path, '/');
+		size_t length = sizeof(pathArr) / sizeof(pathArr[0]);
+		char *fileName = tempPath[length - 1];
+		entry *dir = findDir(tempPath, root_fs);
+		entry *files = (entry *) dir->data;
+		for(int fileI = 0; fileI < DEFAULT_DIR_SIZE; fileI++){
+			entry *file = files[fileI];
+			if(file.type != TYPE_BLANK && strcmp(file.name, fileName) == 0){
+				stbuf->st_mode = S_IFREG | 0755;
+				stbuf->st_nlink = 1;
+				stbuf->st_size = file->size;
+				wasFound = true;
+			}
+		}
+		if(!wasFound)
+		{
+			res = -ENOENT;
+		}
 	}
 
 	return res;
