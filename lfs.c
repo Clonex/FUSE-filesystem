@@ -92,6 +92,8 @@ int lfs_getattr( const char *path, struct stat *stbuf ) {
 	return res;
 }
 
+
+
 int lfs_readdir( const char *path, void *buf, fuse_fill_dir_t filler, off_t offset, struct fuse_file_info *fi ) {
 	(void) offset;
 	(void) fi;
@@ -104,9 +106,8 @@ int lfs_readdir( const char *path, void *buf, fuse_fill_dir_t filler, off_t offs
 	filler(buf, "..", NULL, 0);
 	filler(buf, "hejsa", NULL, 0);
 
-	
-
-	char **tempPath = splitString(strcat(path, "/"), '/');
+	char **tempPath = splitString(path, '/');
+	printArr(tempPath);
 	entry *dir = findDir(tempPath, root_fs);
 	entry *files = (entry *) dir->data;
 	for(int fileI = 0; fileI < DEFAULT_DIR_SIZE; fileI++){
@@ -164,4 +165,22 @@ int main( int argc, char *argv[] ) {
 
 	fuse_main( argc, argv, &lfs_oper );
 	return 0;
+}
+
+
+void printArr(char **arr)
+{
+    printf("[");
+    int length = getLength(arr);
+    for(int i = 0; i < length; i++)
+    {
+        if(i == 0)
+        {
+            printf("\"%s\"", arr[i]);
+        }else{
+            printf(" ,\"%s\"", arr[i]);
+        }
+    }
+    printf("]\n");
+
 }
