@@ -42,7 +42,10 @@ int lfs_getattr( const char *path, struct stat *stbuf ) {
 		stbuf->st_nlink = 1;
 		stbuf->st_size = 150;
 	} else {
-		res = -ENOENT;
+		stbuf->st_mode = S_IFREG | 0755;
+		stbuf->st_nlink = 1;
+		stbuf->st_size = 150;
+		//res = -ENOENT;
 	}
 
 	return res;
