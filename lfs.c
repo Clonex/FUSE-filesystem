@@ -103,11 +103,13 @@ int lfs_readdir( const char *path, void *buf, fuse_fill_dir_t filler, off_t offs
 	/*if(strcmp(path, "/") != 0)
 		return -ENOENT;*/
 
+
+
 	filler(buf, ".", NULL, 0);
 	filler(buf, "..", NULL, 0);
 	filler(buf, "hejsa", NULL, 0);
 
-	char **tempPath = splitString(path, '/');
+	char **tempPath = splitString(strcat(path, "/"), '/');
 	printArr(tempPath);
 	entry *dir = findDir(tempPath, root_fs);
 	entry *files = (entry *) dir->data;
