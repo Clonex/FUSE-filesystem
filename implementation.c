@@ -68,7 +68,7 @@ entry* findDir(char **pathArr, entry* folder){
 
     printf("Checking dir..\n");
     entry *currentEntry = folder;
-    for(int pathI = 0; pathI < length; pathI++){
+    for(int pathI = 0; pathI < length - 1; pathI++){
         printf("Current dir: %s\n", currentEntry->name);
         printf("Current path: %s\n", pathArr[pathI]);
 
