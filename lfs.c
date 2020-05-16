@@ -45,8 +45,8 @@ int lfs_getattr( const char *path, struct stat *stbuf ) {
 		entry *dir = findDir(tempPath, root_fs);
 		entry *files = (entry *) dir->data;
 		for(int fileI = 0; fileI < DEFAULT_DIR_SIZE; fileI++){
-			entry *file = files[fileI];
-			if(file->type != TYPE_BLANK && strcmp(file->name, fileName) == 0){
+			entry file = files[fileI];
+			if(file.type != TYPE_BLANK && strcmp(file.name, fileName) == 0){
 				stbuf->st_mode = S_IFREG | 0755;
 				stbuf->st_nlink = 1;
 				stbuf->st_size = file->size;
