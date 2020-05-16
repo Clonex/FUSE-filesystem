@@ -71,7 +71,12 @@ int lfs_getattr( const char *path, struct stat *stbuf ) {
 			entry file = files[fileI];
 			if(file.type != TYPE_BLANK && strcmp(file.name, fileName) == 0){
 				printf("Found attr-entry..\n");
-				stbuf->st_mode = S_IFREG | 0755;
+				if(file.type == TYPE_DIR)
+				{
+					stbuf->st_mode = S_IFDIR | 0755;
+				}else{
+					stbuf->st_mode = S_IFREG | 0755;
+				}
 				stbuf->st_nlink = 1;
 				stbuf->st_size = file.size;
 				stbuf->st_mtime = file.time;
