@@ -71,8 +71,7 @@ entry* findDir(char **pathArr, entry* folder){
     for(int pathI = 0; pathI < length; pathI++){
         for(int fileI = 0; fileI < DEFAULT_DIR_SIZE; fileI++){
             entry *file = (entry *) currentEntry->data;
-            if(file[fileI].type == TYPE_DIR && strcmp(file[fileI].name, pathArr[pathI]) == 0)
-            {
+            if(file[fileI].type == TYPE_DIR && strcmp(file[fileI].name, pathArr[pathI]) == 0){
                 currentEntry = &file[fileI];
                 fileI = DEFAULT_DIR_SIZE; // Next path
             }
