@@ -75,14 +75,14 @@ int lfs_readdir( const char *path, void *buf, fuse_fill_dir_t filler, off_t offs
 	filler(buf, "..", NULL, 0);
 	filler(buf, "hejsa", NULL, 0);
 
-	char **tempPath = splitString(strcat(path, "/"), '/');
+	/*char **tempPath = splitString(strcat(path, "/"), '/');
 	entry *dir = findDir(tempPath, root_fs);
 	entry *files = (entry *) dir->data;
 	for(int fileI = 0; fileI < DEFAULT_DIR_SIZE; fileI++){
 		if(files[fileI].type != TYPE_BLANK){
 			filler(buf, files[fileI].name, NULL, 0);
 		}
-	}
+	}*/
 	
 	return 0;
 }
