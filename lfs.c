@@ -106,7 +106,7 @@ int lfs_open( const char *path, struct fuse_file_info *fi ) {
 	return 0;
 }
 
-int lfs_utime( const char *path, struct fuse_file_info *fi ){
+int lfs_utime( const char *path, struct utimebuf *buf ){
 	return 0;
 }
 
