@@ -1,5 +1,6 @@
 entry* findDir(char **pathArr, entry* folder);
 char **splitString(const char *input, char delimiter);
+int getLength(char **arr);
 
 /*
  * 
