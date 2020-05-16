@@ -40,7 +40,11 @@ int lfs_getattr( const char *path, struct stat *stbuf ) {
 	} else {
 		bool wasFound = false;
 		char **tempPath = splitString(path, '/');
-		size_t length = sizeof(tempPath) / sizeof(tempPath[0]);
+		if(tempPath == NULL)
+		{
+			return -1; // TODO
+		}
+		int length = getLength(tempPath);
 		char *fileName = tempPath[length - 1];
 		printf("tempPath.length = %d\n", length);
 		for(int a = 0; a < length; a++)

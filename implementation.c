@@ -42,8 +42,7 @@ int createEntry(const char *path, int type)
     {
         return -1; // TODO: error
     }
-    size_t length = sizeof(pathArr) / sizeof(pathArr[0]);
-    file->name = pathArr[length - 1]; 
+    file->name = pathArr[getLength(pathArr) - 1]; 
     file->access = ACCESS_READ_WRITE;
 
     entry *targetDir = findDir(pathArr, root_fs);
@@ -64,7 +63,7 @@ int createEntry(const char *path, int type)
  * Finds the correct entry for a given path.
  */
 entry* findDir(char **pathArr, entry* folder){
-    size_t length = sizeof(pathArr) / sizeof(pathArr[0]);
+    size_t length = getLength(pathArr);//sizeof(pathArr) / sizeof(pathArr[0]);
     if(length == 2){
         return folder;
     }
@@ -111,4 +110,14 @@ char **splitString(const char *input, char delimiter){
     memcpy(out[count], &input[j], (strlen(input) - j));
 
     return out;
+}
+
+/*
+ * 
+ */
+int getLength(char **arr)
+{
+    int count = -1;
+    while(arr[++count]){}
+    return count;
 }

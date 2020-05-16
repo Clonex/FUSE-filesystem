@@ -1,6 +1,31 @@
 #include "lfs.h" 
 #include "implementation.c" 
 
+void printArr(char **arr)
+{
+    printf("[");
+    int length = sizeof(arr) / sizeof(arr[0]);
+    for(int i = 0; i < length; i++)
+    {
+        if(i == 0)
+        {
+            printf("\"%s\"", arr[i]);
+        }else{
+            printf(" ,\"%s\"", arr[i]);
+        }
+    }
+    printf("]\n");
+
+}
+
+
+int count(char **arr)
+{
+    int count = -1;
+    while(arr[++count]){}
+    return count;
+}
+
 int main()
 {
     root_fs = malloc(sizeof(struct entry));
@@ -24,6 +49,9 @@ int main()
         data[i].name = "";
     }
 
-    int test = createEntry("/fil", TYPE_FILE);
-    printf("%d\n", test);//a
+    //int test = createEntry("/fil", TYPE_FILE);
+    char **test = splitString("/fil", '/');
+    printf("Length = %d\n", count(test));
+    printArr(test);
+    //printf("%d\n", test);//a
 }
