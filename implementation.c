@@ -31,9 +31,9 @@ int createEntry(const char *path, int type)
     }else{
         file->size = 0;
     }
-    time_t stamp;
-    time(&stamp);
-    file->time = stamp;
+    //time_t stamp;
+    //time(&stamp);
+    file->time = 0;//stamp;
     file->type = type;
   
     char **pathArr = splitString(path, '/');
