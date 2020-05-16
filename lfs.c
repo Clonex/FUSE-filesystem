@@ -1,4 +1,4 @@
-#include <fuse.h>
+//#include <fuse.h>
 #include "lfs.h" 
 #include "implementation.c" 
 
@@ -67,7 +67,7 @@ int lfs_readdir( const char *path, void *buf, fuse_fill_dir_t filler, off_t offs
 			filler(buf, file[fileI].name, NULL, 0);
 		}
 	}
-	
+
 	return 0;
 }
 
