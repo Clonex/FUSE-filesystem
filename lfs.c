@@ -44,7 +44,7 @@ int lfs_makedir(const char *path, mode_t mode){
 
 int lfs_getattr( const char *path, struct stat *stbuf ) {
 	int res = 0;
-	printf("getattr: (path=%s)\n", path);
+	printf("getattr(): (path=%s)\n", path);
 
 	memset(stbuf, 0, sizeof(struct stat));
 	if( strcmp( path, "/" ) == 0 ) {
@@ -59,17 +59,18 @@ int lfs_getattr( const char *path, struct stat *stbuf ) {
 		}
 		int length = getLength(tempPath);
 		char *fileName = tempPath[length - 1];
-		printf("tempPath.length = %d\n", length);
+		printf("getattr(): tempPath.length = %d\n", length);
 		for(int a = 0; a < length; a++)
 		{
 			printf("\"%s\", \n", tempPath[a]);
 		}
 		
-		printf("Searching for file: %s\n", fileName);
+		printf("getattr(): Searching for file: %s\n", fileName);
 		entry *dir = findDir(tempPath, root_fs);
 		entry *files = (entry *) dir->data;
 		for(int fileI = 0; fileI < DEFAULT_DIR_SIZE; fileI++){
 			entry file = files[fileI];
+			printf("getattr(): comparing name: %s\n", file.name);
 			if(file.type != TYPE_BLANK && strcmp(file.name, fileName) == 0){
 				printf("Found attr-entry..\n");
 				if(file.type == TYPE_DIR)
