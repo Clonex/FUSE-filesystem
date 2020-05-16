@@ -49,7 +49,7 @@ int lfs_getattr( const char *path, struct stat *stbuf ) {
 			if(file.type != TYPE_BLANK && strcmp(file.name, fileName) == 0){
 				stbuf->st_mode = S_IFREG | 0755;
 				stbuf->st_nlink = 1;
-				stbuf->st_size = file->size;
+				stbuf->st_size = file.size;
 				wasFound = true;
 			}
 		}
