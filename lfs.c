@@ -58,11 +58,16 @@ int lfs_readdir( const char *path, void *buf, fuse_fill_dir_t filler, off_t offs
 
 	filler(buf, ".", NULL, 0);
 	filler(buf, "..", NULL, 0);
-	filler(buf, "test", NULL, 0);
-	filler(buf, "folder", NULL, 0);
 
+	entry **tempPath = strcat(path, '/');
+	entry *dir = findDir(tempPath, root_fs);
+	for(int fileI = 0; fileI < DEFAULT_DIR_SIZE; fileI++){
+		entry *file = (entry *) currentEntry->data;
+		if(file[fileI].type != TYPE_BLANK){
+			filler(buf, file[fileI].name, NULL, 0);
+		}
+	}
 	
-
 	return 0;
 }
 
