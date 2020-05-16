@@ -39,21 +39,23 @@ int lfs_getattr( const char *path, struct stat *stbuf ) {
 		stbuf->st_nlink = 2;
 	} else {
 		bool wasFound = false;
-		/*char **tempPath = splitString(path, '/');
+		char **tempPath = splitString(path, '/');
 		size_t length = sizeof(tempPath) / sizeof(tempPath[0]);
 		char *fileName = tempPath[length - 1];
+		printf("Searching for file: %s\n", fileName);
 		entry *dir = findDir(tempPath, root_fs);
 		entry *files = (entry *) dir->data;
 		for(int fileI = 0; fileI < DEFAULT_DIR_SIZE; fileI++){
 			entry file = files[fileI];
 			if(file.type != TYPE_BLANK && strcmp(file.name, fileName) == 0){
+				printf("Found attr-entry..\n");
 				stbuf->st_mode = S_IFREG | 0755;
 				stbuf->st_nlink = 1;
 				stbuf->st_size = file.size;
 				stbuf->st_mtime = file.time;
 				wasFound = true;
 			}
-		}*/
+		}
 		if(!wasFound)
 		{
 			res = -ENOENT;
@@ -75,14 +77,14 @@ int lfs_readdir( const char *path, void *buf, fuse_fill_dir_t filler, off_t offs
 	filler(buf, "..", NULL, 0);
 	filler(buf, "hejsa", NULL, 0);
 
-	/*char **tempPath = splitString(strcat(path, "/"), '/');
+	char **tempPath = splitString(strcat(path, "/"), '/');
 	entry *dir = findDir(tempPath, root_fs);
 	entry *files = (entry *) dir->data;
 	for(int fileI = 0; fileI < DEFAULT_DIR_SIZE; fileI++){
 		if(files[fileI].type != TYPE_BLANK){
 			filler(buf, files[fileI].name, NULL, 0);
 		}
-	}*/
+	}
 	
 	return 0;
 }

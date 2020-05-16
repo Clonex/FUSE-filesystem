@@ -10,6 +10,7 @@ char **splitString(const char *input, char delimiter);
  */
 int createEntry(const char *path, int type)
 {
+    printf("Creating file..\n");
     entry *file = calloc(1, sizeof(entry));
     if(file == NULL){
         return -1; // TODO error
@@ -55,6 +56,7 @@ int createEntry(const char *path, int type)
             break;
         }
     }
+    printf("Entry added..\n");
     return 0;
 }
 
