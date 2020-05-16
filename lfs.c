@@ -50,6 +50,7 @@ int lfs_getattr( const char *path, struct stat *stbuf ) {
 				stbuf->st_mode = S_IFREG | 0755;
 				stbuf->st_nlink = 1;
 				stbuf->st_size = file.size;
+				stbuf->st_mtime = file.time;
 				wasFound = true;
 			}
 		}
