@@ -39,7 +39,7 @@ int lfs_getattr( const char *path, struct stat *stbuf ) {
 		stbuf->st_nlink = 2;
 	} else {
 		bool wasFound = false;
-		char **tempPath = splitString(path, '/');
+		/*char **tempPath = splitString(path, '/');
 		size_t length = sizeof(tempPath) / sizeof(tempPath[0]);
 		char *fileName = tempPath[length - 1];
 		entry *dir = findDir(tempPath, root_fs);
@@ -53,7 +53,7 @@ int lfs_getattr( const char *path, struct stat *stbuf ) {
 				stbuf->st_mtime = file.time;
 				wasFound = true;
 			}
-		}
+		}*/
 		if(!wasFound)
 		{
 			res = -ENOENT;
