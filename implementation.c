@@ -64,10 +64,7 @@ int createEntry(const char *path, int type)
  * Finds the correct entry for a given path.
  */
 entry* findDir(char **pathArr, entry* folder){
-    size_t length = getLength(pathArr);//sizeof(pathArr) / sizeof(pathArr[0]);
-    if(length == 2){
-        return folder;
-    }
+    size_t length = getLength(pathArr);
     
     entry *currentEntry = folder;
     for(int pathI = 0; pathI < length; pathI++){

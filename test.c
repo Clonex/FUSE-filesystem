@@ -4,7 +4,7 @@
 void printArr(char **arr)
 {
     printf("[");
-    int length = sizeof(arr) / sizeof(arr[0]);
+    int length = count(arr);
     for(int i = 0; i < length; i++)
     {
         if(i == 0)
@@ -50,8 +50,19 @@ int main()
     }
 
     //int test = createEntry("/fil", TYPE_FILE);
-    char **test = splitString("/fil", '/');
-    printf("Length = %d\n", count(test));
-    printArr(test);
+    /*
+        /.
+        /..
+        /hej.txt
+        /mappe
+        /mappe/fil.txt
+    */
+    char **filTest = splitString("/hej.txt", '/');
+    printf("fil1 Length = %d\n", count(filTest));
+    printArr(filTest);
+
+    char **filTest2 = splitString("/mappe", '/');
+    printf("Length = %d\n", count(filTest2));
+    printArr(filTest2);
     //printf("%d\n", test);//a
 }
