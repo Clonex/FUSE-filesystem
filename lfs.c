@@ -17,23 +17,27 @@ static inline int lsfs_utime_STUB(const char *path, struct utimbuf *buf) {
 
 
 static struct fuse_operations lfs_oper = {
-	.getattr	= lfs_getattr,	// Get a attribute
-	.readdir	= lfs_readdir,	//	
-	.mknod = lfs_makefile,				// Make a file
-	.mkdir = NULL,				// Make a directory
-	.unlink = NULL,				// Remove file
-	.rmdir = NULL,				// Rename folder
-	.truncate = NULL,			// Empty a file
-	.open	= lfs_open,			// Opens a 
-	.read	= lfs_read,			// Reads a 
-	.release = lfs_release,		// Closes a 
-	.write = NULL,			
-	.rename = NULL,				
-	.utime = lsfs_utime_STUB
+	.getattr	= lfs_getattr,		// Get a attribute
+	.readdir	= lfs_readdir,		//	
+	.mknod 		= lfs_makefile,		// Make a file
+	.mkdir 		= lfs_makedir,		// Make a directory
+	.unlink 	= NULL,				// Remove file
+	.rmdir 		= NULL,				// Rename folder
+	.truncate 	= NULL,				// Empty a file
+	.open		= lfs_open,			// Opens a 
+	.read		= lfs_read,			// Reads a 
+	.release 	= lfs_release,		// Closes a 
+	.write 		= NULL,			
+	.rename 	= NULL,				
+	.utime 		= lsfs_utime_STUB
 };
 
 int lfs_makefile(const char *path, mode_t mode, dev_t device){
 	return createEntry(path, TYPE_FILE);
+}
+
+int lfs_makedir(const char *path, mode_t mode, dev_t device){
+	return createEntry(path, TYPE_DIR);
 }
 
 int lfs_getattr( const char *path, struct stat *stbuf ) {
