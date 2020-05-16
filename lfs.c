@@ -8,7 +8,7 @@ int lfs_open( const char *, struct fuse_file_info * );
 int lfs_read( const char *, char *, size_t, off_t, struct fuse_file_info * );
 int lfs_release(const char *path, struct fuse_file_info *fi);
 int lfs_makefile(const char *path, mode_t mode, dev_t device);
-int lfs_makedir(const char *path, mode_t mode, dev_t device);
+int lfs_makedir(const char *path, mode_t mode);
 
 static inline int lsfs_utime_STUB(const char *path, struct utimbuf *buf) {
     (void)path;
@@ -37,7 +37,7 @@ int lfs_makefile(const char *path, mode_t mode, dev_t device){
 	return createEntry(path, TYPE_FILE);
 }
 
-int lfs_makedir(const char *path, mode_t mode, dev_t device){
+int lfs_makedir(const char *path, mode_t mode){
 	return createEntry(path, TYPE_DIR);
 }
 
