@@ -88,7 +88,7 @@ entry* findDir(char **pathArr, entry* folder){
 char **splitString(const char *input, char delimiter){
     int count = 0;
     int j = 0;
-    char **out = calloc(count, sizeof(char *));
+    char **out = calloc(strlen(input), sizeof(char *));
     if(out == NULL)
     {
         return NULL;
@@ -102,21 +102,13 @@ char **splitString(const char *input, char delimiter){
             {
                 return NULL;
             }
+            memcpy(out[count], &input[j], (i-j));
             count++;
-            j = i;
+            j = i+1;
         }
     }
     out[count] = calloc(((strlen(input) - 1) - j), sizeof(char));
+    memcpy(out[count], &input[j], (strlen(input) - j));
 
-    int target = 0;
-    for(int i = 0; i < strlen(input); i++)
-    {
-        if(input[i] == delimiter)
-        {
-            target++;
-            continue;
-        }
-        sprintf(out[target], "%s%c", out[target], input[i]);
-    }
     return out;
 }
