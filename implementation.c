@@ -1,4 +1,4 @@
-entry* findDir(char **pathArr, entry* folder, bool skipLast);
+entry* findEntry(char **pathArr, entry* folder);
 char **splitString(const char *input, char delimiter);
 int getLength(char **arr);
 
@@ -46,7 +46,7 @@ int createEntry(const char *path, int type)
     file->name = pathArr[getLength(pathArr) - 1]; 
     file->access = ACCESS_READ_WRITE;
 
-    entry *targetDir = findDir(pathArr, root_fs, false);
+    entry *targetDir = findEntry(pathArr, root_fs);
     for(int i = 0; i < DEFAULT_DIR_SIZE; i++)
     {
         entry *data = (entry *) targetDir->data;
@@ -63,23 +63,19 @@ int createEntry(const char *path, int type)
 /*
  * Finds the correct entry for a given path.
  */
-entry* findDir(char **pathArr, entry* folder, bool skipLast){
+entry* findEntry(char **pathArr, entry* folder){
     size_t length = getLength(pathArr);
-    if(skipLast)
-    {
-        length--;
-    }
-    printf("findDir(): Checking dir..\n");
+    printf("findEntry(): Checking dir..\n");
     entry *currentEntry = folder;
     for(int pathI = 0; pathI < length; pathI++){ // Måske (length - 1)
-        printf("findDir(): Current dir: %s\n", currentEntry->name);
-        printf("findDir(): Current path: %s\n", pathArr[pathI]);
+        printf("findEntry(): Current dir: %s\n", currentEntry->name);
+        printf("findEntry(): Current path: %s\n", pathArr[pathI]);
 
         for(int fileI = 0; fileI < DEFAULT_DIR_SIZE; fileI++){
             entry *file = (entry *) currentEntry->data;
-            if(file[fileI].type == TYPE_DIR && strcmp(file[fileI].name, pathArr[pathI]) == 0){
+            if(file[fileI].type != TYPE_BLANK && strcmp(file[fileI].name, pathArr[pathI]) == 0){
                 currentEntry = &file[fileI];
-                printf("findDir(): New folder: %s\n", currentEntry->name);
+                printf("findEntry(): New folder: %s\n", currentEntry->name);
                 break; // Next path
             }
         }
