@@ -10,6 +10,8 @@ int lfs_release(const char *path, struct fuse_file_info *fi);
 int lfs_makefile(const char *path, mode_t mode, dev_t device);
 int lfs_makedir(const char *path, mode_t mode);
 int lfs_write( const char *path, const char *buf, size_t size, off_t offset, struct fuse_file_info *fi );
+int lsfs_truncate(const char *path, off_t offset);
+
 void printArr(char **arr);
 
 static inline int lsfs_utime_STUB(const char *path, struct utimbuf *buf) {
@@ -26,7 +28,7 @@ static struct fuse_operations lfs_oper = {
 	.mkdir 		= lfs_makedir,		// Make a directory
 	.unlink 	= NULL,				// Remove file
 	.rmdir 		= NULL,				// Rename folder
-	.truncate 	= NULL,				// Empty a file
+	.truncate 	= lsfs_truncate,				// Empty a file
 	.open		= lfs_open,			// Opens a 
 	.read		= lfs_read,			// Reads a 
 	.release 	= lfs_release,		// Closes a 
@@ -45,6 +47,10 @@ int lfs_makedir(const char *path, mode_t mode){
 
 int lfs_getattr( const char *path, struct stat *stbuf ) {
 	return getAttributes(path, stbuf);
+}
+
+int lsfs_truncate(const char *path, off_t offset) {
+	return 0;
 }
 
 int lfs_readdir( const char *path, void *buf, fuse_fill_dir_t filler, off_t offset, struct fuse_file_info *fi ) {
@@ -72,7 +78,7 @@ int lfs_readdir( const char *path, void *buf, fuse_fill_dir_t filler, off_t offs
 
 //Permission
 int lfs_open( const char *path, struct fuse_file_info *fi ) {
-    printf("open: (path=%s)\n", path);
+    printf("open(): path=%s\n", path);
 
 	char **tempPath = splitString(path, '/', true);
 	if(tempPath == NULL)
@@ -117,7 +123,7 @@ int lfs_read( const char *path, char *buf, size_t size, off_t offset, struct fus
 }
 
 int lfs_release(const char *path, struct fuse_file_info *fi) {
-	printf("release: (path=%s)\n", path);
+	printf("release(): (path=%s)\n", path);
 	fi->fh = NULL;
 	return 0;
 }
