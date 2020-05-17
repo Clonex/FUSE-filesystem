@@ -65,6 +65,7 @@ int lsfs_rmdir(const char *path){
 		file->type = TYPE_BLANK;
 		file->name = "";
 	}
+	return 0;
 }
 
 int lsfs_unlink(const char *path){
@@ -76,6 +77,7 @@ int lsfs_unlink(const char *path){
 		file->type = TYPE_BLANK;
 		file->name = "";
 	}
+	return 0;
 }
 
 int lfs_readdir( const char *path, void *buf, fuse_fill_dir_t filler, off_t offset, struct fuse_file_info *fi ) {

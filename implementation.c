@@ -54,14 +54,14 @@ void recursiveRemoveDir(entry* dir)
     entry *data = (entry *) dir->data;
     for(int i = 0; i < DEFAULT_DIR_SIZE; i++)
     {
-        entry file = data[i];
-        if(file.type == TYPE_DIR)
+        entry *file = &data[i];
+        if(file->type == TYPE_DIR)
         {
             recursiveRemoveDir(&file);
-        }else if(file.type == TYPE_FILE){
-            free(file.data);
+        }else if(file->type == TYPE_FILE){
+            free(file->data);
         }
-        free(&file);
+        free(file);
     }
     free(data);
 }
