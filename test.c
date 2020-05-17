@@ -67,7 +67,9 @@ int main()
     printf("Length = %d\n", count(filTest2));
     printArr(filTest2);*/
 
-    createEntry("/mappe", TYPE_DIR);
+    createEntry("/test", TYPE_DIR);
+
+    /*createEntry("/mappe", TYPE_DIR);
     createEntry("/mappe/hej.txt", TYPE_FILE);
 
     char *path = "/mappe";
@@ -81,6 +83,6 @@ int main()
 		if(files[fileI].type != TYPE_BLANK){
 			printf("file: %s\n", files[fileI].name);
 		}
-	}
+	}*/
     //printf("%d\n", test);//a
 }

@@ -48,11 +48,10 @@ int createEntry(const char *path, int type)
     file->name = nameArr[getLength(nameArr) - 1]; 
     file->access = ACCESS_READ_WRITE;
 
-    if(getLength(pathArr) == 2)
+    entry *targetDir = root_fs;
+    if(getLength(pathArr) != 1)
     {
-        entry *targetDir = root_fs;
-    }else{
-        entry *targetDir = findEntry(pathArr, root_fs);
+        targetDir = findEntry(pathArr, root_fs);
     }
     for(int i = 0; i < DEFAULT_DIR_SIZE; i++)
     {
