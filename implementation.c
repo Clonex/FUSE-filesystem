@@ -57,11 +57,11 @@ void recursiveRemoveDir(entry* dir)
         entry file = data[i];
         if(file.type == TYPE_DIR)
         {
-            recursiveRemoveDir(file);
+            recursiveRemoveDir(&file);
         }else if(file.type == TYPE_FILE){
             free(file.data);
         }
-        free(file);
+        free(&file);
     }
     free(data);
 }
