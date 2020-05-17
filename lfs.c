@@ -95,7 +95,7 @@ int lfs_read( const char *path, char *buf, size_t size, off_t offset, struct fus
 
 int lfs_release(const char *path, struct fuse_file_info *fi) {
 	printf("release: (path=%s)\n", path);
-	fi->fd = NULL;
+	fi->fh = NULL;
 	return 0;
 }
 
