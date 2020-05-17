@@ -72,6 +72,7 @@ int createEntry(const char *path, int type)
         }
     }else{
         file->size = 0;
+        file->data = NULL;
     }
     time_t stamp;
     time(&stamp);

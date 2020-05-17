@@ -29,7 +29,7 @@ static struct fuse_operations lfs_oper = {
 	.open		= lfs_open,			// Opens a 
 	.read		= lfs_read,			// Reads a 
 	.release 	= lfs_release,		// Closes a 
-	.write 		= NULL,			
+	.write 		= lfs_write,			
 	.rename 	= NULL,				
 	.utime 		= lsfs_utime_STUB
 };
@@ -83,7 +83,23 @@ int lfs_open( const char *path, struct fuse_file_info *fi ) {
 	return 0;
 }
 
-
+int lfs_write( const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi ) {
+    printf("write: (path=%s)\n", path);
+	entry *target = (entry *) fi->fh;
+	if(target->data != NULL)
+	{
+		free(target->data);
+	}
+	target->data = malloc(size * sizeof(char));
+	if(target->data == NULL)
+	{
+		return 0;
+	}
+	target->size = size;
+	
+	memcpy(target->data, buf, size);
+	return size;
+}
 
 int lfs_read( const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi ) {
     printf("read: (path=%s)\n", path);
