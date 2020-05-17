@@ -1,5 +1,5 @@
 entry* findEntry(char **pathArr, entry* folder);
-char **splitString(const char *input, char delimiter);
+char **splitString(const char *input, char delimiter, bool includeLast);
 int getLength(char **arr);
 
 /*
@@ -38,7 +38,7 @@ int createEntry(const char *path, int type)
     file->time = stamp;
     file->type = type;
   
-    char **pathArr = splitString(path, '/');
+    char **pathArr = splitString(path, '/', false);
     if(pathArr == NULL)
     {
         return -1; // TODO: error
@@ -92,7 +92,7 @@ entry* findEntry(char **pathArr, entry* folder){
 /*
  * @returns a array of the input splitted by the delimiter.
  */
-char **splitString(const char *input, char delimiter){
+char **splitString(const char *input, char delimiter, bool includeLast){
     int count = 0;
     int j = 0;
     char **out = calloc(strlen(input), sizeof(char *));
@@ -114,8 +114,11 @@ char **splitString(const char *input, char delimiter){
             j = i+1;
         }
     }
-    out[count] = calloc(((strlen(input) - 1) - j), sizeof(char));
-    memcpy(out[count], &input[j], (strlen(input) - j));
+    if(includeLast)
+    {
+        out[count] = calloc(((strlen(input) - 1) - j), sizeof(char));
+        memcpy(out[count], &input[j], (strlen(input) - j));
+    }
 
     return out;
 }

@@ -51,7 +51,7 @@ int lfs_getattr( const char *path, struct stat *stbuf ) {
 		stbuf->st_mode = S_IFDIR | 0755;
 		stbuf->st_nlink = 2;
 	} else {
-		char **tempPath = splitString(path, '/');
+		char **tempPath = splitString(path, '/', true);
 		if(tempPath == NULL)
 		{
 			return -1; // TODO
@@ -119,7 +119,7 @@ int lfs_readdir( const char *path, void *buf, fuse_fill_dir_t filler, off_t offs
 	filler(buf, "..", NULL, 0);
 	filler(buf, "hejsa", NULL, 0);
 
-	char **tempPath = splitString(path, '/');
+	char **tempPath = splitString(path, '/', true);
 	printArr(tempPath);
 	entry *dir = findEntry(tempPath, root_fs);
 	printf("readdir(): name = %s\n\n", dir->name);
