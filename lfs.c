@@ -109,6 +109,7 @@ int lfs_read( const char *path, char *buf, size_t size, off_t offset, struct fus
 	if(source->data == NULL)
 	{
 		data = "";
+		size = sizeof(data);
 	}
 	memcpy( buf, data, size );
 	return size;
