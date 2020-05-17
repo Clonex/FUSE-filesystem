@@ -81,7 +81,12 @@ entry* findEntry(char **pathArr, entry* folder){
         }
         printf("\n");
     }
-    return currentEntry;
+
+    if(currentEntry->name == pathArr[length - 1])
+    {
+        return currentEntry;
+    }
+    return NULL;
 }
 
 /*
