@@ -49,6 +49,8 @@ int createEntry(const char *path, int type)
     file->access = ACCESS_READ_WRITE;
 
     entry *targetDir = root_fs;
+    printArr(pathArr);
+    printf("length %d\n", getLength(pathArr));
     if(getLength(pathArr) != 1)
     {
         targetDir = findEntry(pathArr, root_fs);
