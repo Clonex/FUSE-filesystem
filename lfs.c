@@ -43,7 +43,6 @@ int lfs_makedir(const char *path, mode_t mode){
 }
 
 int lfs_getattr( const char *path, struct stat *stbuf ) {
-	
 	printf("getattr(): (path=%s)\n", path);
 
 	memset(stbuf, 0, sizeof(struct stat));
@@ -78,27 +77,6 @@ int lfs_getattr( const char *path, struct stat *stbuf ) {
 			return 0;
 		}
 		return -ENOENT;
-		/*entry *files = (entry *) dir->data;
-		for(int fileI = 0; fileI < DEFAULT_DIR_SIZE; fileI++){
-			entry file = files[fileI];
-			if(file.type != TYPE_BLANK)
-			{
-				printf("getattr(): comparing name: %s\n", file.name);
-			}
-			if(file.type != TYPE_BLANK && strcmp(file.name, fileName) == 0){
-				printf("Found attr-entry..\n");
-				if(file.type == TYPE_DIR)
-				{
-					stbuf->st_mode = S_IFDIR | 0755;
-				}else{
-					stbuf->st_mode = S_IFREG | 0755;
-				}
-				stbuf->st_nlink = 1;
-				stbuf->st_size = file.size;
-				stbuf->st_mtime = file.time;
-				return 0;
-			}
-		}*/
 	}
 
 	return 0;
@@ -161,7 +139,7 @@ int main( int argc, char *argv[] ) {
 	}
 	root_fs->type = TYPE_DIR;
 	root_fs->access = ACCESS_READ_WRITE;
-	root_fs->name = "root";
+	root_fs->name = "";
 
     root_fs->size = sizeof(entry) * DEFAULT_DIR_SIZE;
     root_fs->data = calloc(DEFAULT_DIR_SIZE, sizeof(entry));
