@@ -5,6 +5,46 @@ int getLength(char **arr);
 /*
  * 
  */
+int getAttributes(const char *path, struct stat *stbuf){
+    printf("getattr(): (path=%s)\n", path);
+
+	memset(stbuf, 0, sizeof(struct stat));
+	if( strcmp( path, "/" ) == 0 ) {
+		stbuf->st_mode = S_IFDIR | 0755;
+		stbuf->st_nlink = 2;
+	} else {
+		char **tempPath = splitString(path, '/', true);
+		if(tempPath == NULL)
+		{
+			return -1; // TODO
+		}
+		int length = getLength(tempPath);
+		char *fileName = tempPath[length - 1];
+		printf("getattr(): tempPath.length = %d\n", length);
+		printArr(tempPath);
+		
+		printf("getattr(): Searching for file: %s\n", fileName);
+		entry *file = findEntry(tempPath, root_fs);
+		if(file != NULL)
+		{
+			printf("getattr(): Found attr-entry, name: %s\n", file->name);
+			if(file->type == TYPE_DIR)
+			{
+				stbuf->st_mode = S_IFDIR | 0755;
+			}else{
+				stbuf->st_mode = S_IFREG | 0755;
+			}
+			stbuf->st_nlink = 1;
+			stbuf->st_size = file->size;
+			stbuf->st_mtime = file->time;
+			return 0;
+		}
+		return -ENOENT;
+	}
+
+	return 0;
+}
+
 
 /*
  * Adds a entry to the correct folder.

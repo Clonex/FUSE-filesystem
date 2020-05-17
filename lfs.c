@@ -43,59 +43,16 @@ int lfs_makedir(const char *path, mode_t mode){
 }
 
 int lfs_getattr( const char *path, struct stat *stbuf ) {
-	printf("getattr(): (path=%s)\n", path);
-
-	memset(stbuf, 0, sizeof(struct stat));
-	if( strcmp( path, "/" ) == 0 ) {
-		stbuf->st_mode = S_IFDIR | 0755;
-		stbuf->st_nlink = 2;
-	} else {
-		char **tempPath = splitString(path, '/', true);
-		if(tempPath == NULL)
-		{
-			return -1; // TODO
-		}
-		int length = getLength(tempPath);
-		char *fileName = tempPath[length - 1];
-		printf("getattr(): tempPath.length = %d\n", length);
-		printArr(tempPath);
-		
-		printf("getattr(): Searching for file: %s\n", fileName);
-		entry *file = findEntry(tempPath, root_fs);
-		if(file != NULL)
-		{
-			printf("getattr(): Found attr-entry, name: %s\n", file->name);
-			if(file->type == TYPE_DIR)
-			{
-				stbuf->st_mode = S_IFDIR | 0755;
-			}else{
-				stbuf->st_mode = S_IFREG | 0755;
-			}
-			stbuf->st_nlink = 1;
-			stbuf->st_size = file->size;
-			stbuf->st_mtime = file->time;
-			return 0;
-		}
-		return -ENOENT;
-	}
-
-	return 0;
+	return getAttributes(path, stbuf);
 }
-
-
 
 int lfs_readdir( const char *path, void *buf, fuse_fill_dir_t filler, off_t offset, struct fuse_file_info *fi ) {
 	(void) offset;
 	(void) fi;
 	printf("readdir(): (path=%s)\n", path);
 
-	/*if(strcmp(path, "/") != 0)
-		return -ENOENT;*/
-
-
 	filler(buf, ".", NULL, 0);
 	filler(buf, "..", NULL, 0);
-	filler(buf, "hejsa", NULL, 0);
 
 	char **tempPath = splitString(path, '/', true);
 	printArr(tempPath);
@@ -115,6 +72,14 @@ int lfs_readdir( const char *path, void *buf, fuse_fill_dir_t filler, off_t offs
 //Permission
 int lfs_open( const char *path, struct fuse_file_info *fi ) {
     printf("open: (path=%s)\n", path);
+
+	char **tempPath = splitString(path, '/', true);
+	if(tempPath == NULL)
+	{
+		return -1; // TODO
+	}
+	entry *file = findEntry(tempPath, root_fs);
+	fi->fh = file;
 	return 0;
 }
 
@@ -122,12 +87,15 @@ int lfs_open( const char *path, struct fuse_file_info *fi ) {
 
 int lfs_read( const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi ) {
     printf("read: (path=%s)\n", path);
-	memcpy( buf, "Hello\n", 6 );
-	return 6;
+	entry source = fi->fd;
+	char *data = (char *) source->data;
+	memcpy( buf, data, size );
+	return size;
 }
 
 int lfs_release(const char *path, struct fuse_file_info *fi) {
 	printf("release: (path=%s)\n", path);
+	fi->fd = NULL;
 	return 0;
 }
 
