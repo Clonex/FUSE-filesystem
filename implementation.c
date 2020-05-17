@@ -1,4 +1,4 @@
-entry* findDir(char **pathArr, entry* folder);
+entry* findDir(char **pathArr, entry* folder, bool skipLast);
 char **splitString(const char *input, char delimiter);
 int getLength(char **arr);
 
@@ -11,7 +11,7 @@ int getLength(char **arr);
  */
 int createEntry(const char *path, int type)
 {
-    printf("Creating file..\n");
+    printf("createEntry(): Creating file..\n");
     entry *file = calloc(1, sizeof(entry));
     if(file == NULL){
         return -1; // TODO error
@@ -46,7 +46,7 @@ int createEntry(const char *path, int type)
     file->name = pathArr[getLength(pathArr) - 1]; 
     file->access = ACCESS_READ_WRITE;
 
-    entry *targetDir = findDir(pathArr, root_fs);
+    entry *targetDir = findDir(pathArr, root_fs, false);
     for(int i = 0; i < DEFAULT_DIR_SIZE; i++)
     {
         entry *data = (entry *) targetDir->data;
@@ -56,27 +56,30 @@ int createEntry(const char *path, int type)
             break;
         }
     }
-    printf("Entry added..\n");
+    printf("createEntry(): Entry added..\n");
     return 0;
 }
 
 /*
  * Finds the correct entry for a given path.
  */
-entry* findDir(char **pathArr, entry* folder){
+entry* findDir(char **pathArr, entry* folder, bool skipLast){
     size_t length = getLength(pathArr);
-
-    printf("Checking dir..\n");
+    if(skipLast)
+    {
+        length--;
+    }
+    printf("findDir(): Checking dir..\n");
     entry *currentEntry = folder;
     for(int pathI = 0; pathI < length; pathI++){ // Måske (length - 1)
-        printf("Current dir: %s\n", currentEntry->name);
-        printf("Current path: %s\n", pathArr[pathI]);
+        printf("findDir(): Current dir: %s\n", currentEntry->name);
+        printf("findDir(): Current path: %s\n", pathArr[pathI]);
 
         for(int fileI = 0; fileI < DEFAULT_DIR_SIZE; fileI++){
             entry *file = (entry *) currentEntry->data;
             if(file[fileI].type == TYPE_DIR && strcmp(file[fileI].name, pathArr[pathI]) == 0){
                 currentEntry = &file[fileI];
-                printf("New folder: %s\n", currentEntry->name);
+                printf("findDir(): New folder: %s\n", currentEntry->name);
                 break; // Next path
             }
         }
@@ -86,7 +89,7 @@ entry* findDir(char **pathArr, entry* folder){
 }
 
 /*
- * @returns a array of char array
+ * @returns a array of the input splitted by the delimiter.
  */
 char **splitString(const char *input, char delimiter){
     int count = 0;

@@ -43,7 +43,7 @@ int lfs_makedir(const char *path, mode_t mode){
 }
 
 int lfs_getattr( const char *path, struct stat *stbuf ) {
-	int res = 0;
+	
 	printf("getattr(): (path=%s)\n", path);
 
 	memset(stbuf, 0, sizeof(struct stat));
@@ -51,7 +51,6 @@ int lfs_getattr( const char *path, struct stat *stbuf ) {
 		stbuf->st_mode = S_IFDIR | 0755;
 		stbuf->st_nlink = 2;
 	} else {
-		bool wasFound = false;
 		char **tempPath = splitString(path, '/');
 		if(tempPath == NULL)
 		{
@@ -66,11 +65,14 @@ int lfs_getattr( const char *path, struct stat *stbuf ) {
 		}
 		
 		printf("getattr(): Searching for file: %s\n", fileName);
-		entry *dir = findDir(tempPath, root_fs);
+		entry *dir = findDir(tempPath, root_fs, false);
 		entry *files = (entry *) dir->data;
 		for(int fileI = 0; fileI < DEFAULT_DIR_SIZE; fileI++){
 			entry file = files[fileI];
-			printf("getattr(): comparing name: %s\n", file.name);
+			if(file.type != TYPE_BLANK)
+			{
+				printf("getattr(): comparing name: %s\n", file.name);
+			}
 			if(file.type != TYPE_BLANK && strcmp(file.name, fileName) == 0){
 				printf("Found attr-entry..\n");
 				if(file.type == TYPE_DIR)
@@ -82,16 +84,13 @@ int lfs_getattr( const char *path, struct stat *stbuf ) {
 				stbuf->st_nlink = 1;
 				stbuf->st_size = file.size;
 				stbuf->st_mtime = file.time;
-				wasFound = true;
+				return 0;
 			}
 		}
-		if(!wasFound)
-		{
-			res = -ENOENT;
-		}
+		return -ENOENT;
 	}
 
-	return res;
+	return 0;
 }
 
 
@@ -99,7 +98,7 @@ int lfs_getattr( const char *path, struct stat *stbuf ) {
 int lfs_readdir( const char *path, void *buf, fuse_fill_dir_t filler, off_t offset, struct fuse_file_info *fi ) {
 	(void) offset;
 	(void) fi;
-	printf("readdir: (path=%s)\n", path);
+	printf("readdir(): (path=%s)\n", path);
 
 	/*if(strcmp(path, "/") != 0)
 		return -ENOENT;*/
@@ -112,13 +111,13 @@ int lfs_readdir( const char *path, void *buf, fuse_fill_dir_t filler, off_t offs
 
 	char **tempPath = splitString(path, '/');
 	printArr(tempPath);
-	entry *dir = findDir(tempPath, root_fs);
-	printf("name = %s\n\n", dir->name);
+	entry *dir = findDir(tempPath, root_fs, true);
+	printf("readdir(): name = %s\n\n", dir->name);
 	entry *files = (entry *) dir->data;
 	for(int fileI = 0; fileI < DEFAULT_DIR_SIZE; fileI++){
 		if(files[fileI].type != TYPE_BLANK){
 			filler(buf, files[fileI].name, NULL, 0);
-			printf("file: %s\n", files[fileI].name);
+			printf("readdir(): file: %s\n", files[fileI].name);
 		}
 	}
 	
@@ -152,9 +151,7 @@ int main( int argc, char *argv[] ) {
 	}
 	root_fs->type = TYPE_DIR;
 	root_fs->access = ACCESS_READ_WRITE;
-
-	root_fs->type = TYPE_DIR;
-	root_fs->access = ACCESS_READ_WRITE;
+	root_fs->name = "root";
 
     root_fs->size = sizeof(entry) * DEFAULT_DIR_SIZE;
     root_fs->data = calloc(DEFAULT_DIR_SIZE, sizeof(entry));
