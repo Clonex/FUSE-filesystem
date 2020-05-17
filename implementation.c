@@ -1,4 +1,4 @@
-entry* findEntry(char **pathArr, entry* folder);
+entry* findEntry(char **pathArr);
 char **splitString(const char *input, char delimiter, bool includeLast);
 int getLength(char **arr);
 
@@ -24,7 +24,7 @@ int getAttributes(const char *path, struct stat *stbuf){
 		printArr(tempPath);
 		
 		printf("getattr(): Searching for file: %s\n", fileName);
-		entry *file = findEntry(tempPath, root_fs);
+		entry *file = findEntry(tempPath);
 		if(file != NULL)
 		{
 			printf("getattr(): Found attr-entry, name: %s\n", file->name);
@@ -45,6 +45,26 @@ int getAttributes(const char *path, struct stat *stbuf){
 	return 0;
 }
 
+
+/*
+ * 
+ */
+int recursiveRemoveDir(entry* dir)
+{
+    entry *data = (entry *) dir->data;
+    for(int i = 0; i < DEFAULT_DIR_SIZE; i++)
+    {
+        entry *file = data[i];
+        if(file->type == TYPE_DIR)
+        {
+            recursiveRemoveDir(file);
+        }else if(file->type == TYPE_FILE){
+            free(file->data);
+        }
+        free(file);
+    }
+    free(data);
+}
 
 /*
  * Adds a entry to the correct folder.
@@ -94,7 +114,7 @@ int createEntry(const char *path, int type)
     printf("length %d\n", getLength(pathArr));
     if(getLength(pathArr) != 1)
     {
-        targetDir = findEntry(pathArr, root_fs);
+        targetDir = findEntry(pathArr);
     }
     for(int i = 0; i < DEFAULT_DIR_SIZE; i++)
     {
@@ -112,10 +132,10 @@ int createEntry(const char *path, int type)
 /*
  * Finds the correct entry for a given path.
  */
-entry* findEntry(char **pathArr, entry* folder){
+entry* findEntry(char **pathArr){
     size_t length = getLength(pathArr);
     printf("findEntry(): Checking dir..\n");
-    entry *currentEntry = folder;
+    entry *currentEntry = root_fs;
     for(int pathI = 0; pathI < length; pathI++){ // Måske (length - 1)
         printf("findEntry(): Current dir: %s\n", currentEntry->name);
         printf("findEntry(): Current path: %s\n", pathArr[pathI]);

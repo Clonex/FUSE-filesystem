@@ -11,6 +11,8 @@ int lfs_makefile(const char *path, mode_t mode, dev_t device);
 int lfs_makedir(const char *path, mode_t mode);
 int lfs_write( const char *path, const char *buf, size_t size, off_t offset, struct fuse_file_info *fi );
 int lsfs_truncate(const char *path, off_t offset);
+int lsfs_unlink(const char *path);
+int lsfs_rmdir(const char *path);
 
 void printArr(char **arr);
 
@@ -26,8 +28,8 @@ static struct fuse_operations lfs_oper = {
 	.readdir	= lfs_readdir,		//	
 	.mknod 		= lfs_makefile,		// Make a file
 	.mkdir 		= lfs_makedir,		// Make a directory
-	.unlink 	= NULL,				// Remove file
-	.rmdir 		= NULL,				// Rename folder
+	.unlink 	= lsfs_unlink,				// Remove file
+	.rmdir 		= lsfs_rmdir,				// Rename folder
 	.truncate 	= lsfs_truncate,				// Empty a file
 	.open		= lfs_open,			// Opens a 
 	.read		= lfs_read,			// Reads a 
@@ -53,6 +55,29 @@ int lsfs_truncate(const char *path, off_t offset) {
 	return 0;
 }
 
+int lsfs_rmdir(const char *path){
+	char **arr = splitString(path, '/', true);
+	entry *file = findEntry(arr);
+	if(file != NULL)
+	{
+		recursiveRemoveDir(file);
+		file->data = NULL;
+		file->type = TYPE_BLANK;
+		file->name = "";
+	}
+}
+
+int lsfs_unlink(const char *path){
+	char **arr = splitString(path, '/', true);
+	entry *file = findEntry(arr);
+	if(file != NULL)
+	{
+		free(file->data);
+		file->type = TYPE_BLANK;
+		file->name = "";
+	}
+}
+
 int lfs_readdir( const char *path, void *buf, fuse_fill_dir_t filler, off_t offset, struct fuse_file_info *fi ) {
 	(void) offset;
 	(void) fi;
@@ -63,7 +88,7 @@ int lfs_readdir( const char *path, void *buf, fuse_fill_dir_t filler, off_t offs
 
 	char **tempPath = splitString(path, '/', true);
 	printArr(tempPath);
-	entry *dir = findEntry(tempPath, root_fs);
+	entry *dir = findEntry(tempPath);
 	printf("readdir(): name = %s\n\n", dir->name);
 	entry *files = (entry *) dir->data;
 	for(int fileI = 0; fileI < DEFAULT_DIR_SIZE; fileI++){
@@ -85,7 +110,7 @@ int lfs_open( const char *path, struct fuse_file_info *fi ) {
 	{
 		return -1; // TODO
 	}
-	entry *file = findEntry(tempPath, root_fs);
+	entry *file = findEntry(tempPath);
 	fi->fh = (uint64_t) file;
 	return 0;
 }
@@ -103,6 +128,10 @@ int lfs_write( const char *path, const char *buf, size_t size, off_t offset, str
 		return 0;
 	}
 	target->size = size;
+	
+	time_t stamp;
+    time(&stamp);
+    file->time = stamp;
 	
 	memcpy(target->data, buf, size);
 	return size;
