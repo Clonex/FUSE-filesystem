@@ -67,15 +67,15 @@ int lfs_getattr( const char *path, struct stat *stbuf ) {
 		printf("getattr(): Searching for file: %s\n", fileName);
 		entry *file = findEntry(tempPath, root_fs);
 		printf("Found attr-entry..\n");
-		if(file.type == TYPE_DIR)
+		if(file->type == TYPE_DIR)
 		{
 			stbuf->st_mode = S_IFDIR | 0755;
 		}else{
 			stbuf->st_mode = S_IFREG | 0755;
 		}
 		stbuf->st_nlink = 1;
-		stbuf->st_size = file.size;
-		stbuf->st_mtime = file.time;
+		stbuf->st_size = file->size;
+		stbuf->st_mtime = file->time;
 		return 0;
 
 		/*entry *files = (entry *) dir->data;
