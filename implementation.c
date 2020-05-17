@@ -37,16 +37,23 @@ int createEntry(const char *path, int type)
     time(&stamp);
     file->time = stamp;
     file->type = type;
-  
+    
+    char **nameArr = splitString(path, '/', true);
     char **pathArr = splitString(path, '/', false);
-    if(pathArr == NULL)
+    if(pathArr == NULL || nameArr == NULL)
     {
         return -1; // TODO: error
     }
-    file->name = pathArr[getLength(pathArr) - 1]; 
+    
+    file->name = nameArr[getLength(nameArr) - 1]; 
     file->access = ACCESS_READ_WRITE;
 
-    entry *targetDir = findEntry(pathArr, root_fs);
+    if(getLength(pathArr) == 2)
+    {
+        entry *targetDir = root_fs;
+    }else{
+        entry *targetDir = findEntry(pathArr, root_fs);
+    }
     for(int i = 0; i < DEFAULT_DIR_SIZE; i++)
     {
         entry *data = (entry *) targetDir->data;
