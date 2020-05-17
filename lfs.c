@@ -9,6 +9,7 @@ int lfs_read( const char *, char *, size_t, off_t, struct fuse_file_info * );
 int lfs_release(const char *path, struct fuse_file_info *fi);
 int lfs_makefile(const char *path, mode_t mode, dev_t device);
 int lfs_makedir(const char *path, mode_t mode);
+int lfs_write( const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi );
 void printArr(char **arr);
 
 static inline int lsfs_utime_STUB(const char *path, struct utimbuf *buf) {
