@@ -79,7 +79,7 @@ int lfs_open( const char *path, struct fuse_file_info *fi ) {
 		return -1; // TODO
 	}
 	entry *file = findEntry(tempPath, root_fs);
-	fi->fh = file;
+	fi->fh = (uint64_t) file;
 	return 0;
 }
 
@@ -87,7 +87,7 @@ int lfs_open( const char *path, struct fuse_file_info *fi ) {
 
 int lfs_read( const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi ) {
     printf("read: (path=%s)\n", path);
-	entry *source = fi->fh;
+	entry *source = (entry *) fi->fh;
 	char *data = (char *) source->data;
 	memcpy( buf, data, size );
 	return size;
