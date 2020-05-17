@@ -128,10 +128,10 @@ int lfs_write( const char *path, const char *buf, size_t size, off_t offset, str
 		return 0;
 	}
 	target->size = size;
-	
+
 	time_t stamp;
     time(&stamp);
-    file->time = stamp;
+    target->time = stamp;
 	
 	memcpy(target->data, buf, size);
 	return size;
