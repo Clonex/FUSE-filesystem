@@ -103,9 +103,13 @@ int lfs_write( const char *path, const char *buf, size_t size, off_t offset, str
 }
 
 int lfs_read( const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi ) {
-    printf("read: (path=%s)\n", path);
+    printf("read: (path=%s), size:%ld\n", path, size);
 	entry *source = (entry *) fi->fh;
 	char *data = (char *) source->data;
+	if(source->data == NULL)
+	{
+		data = "";
+	}
 	memcpy( buf, data, size );
 	return size;
 }
