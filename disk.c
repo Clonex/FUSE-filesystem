@@ -50,7 +50,7 @@ void saveToDisk(entry *file)
 
     FILE * fp;
     fp = fopen("data.img", "w+");
-    fputc(output, fpbw);
+    fputc(output, fp);
     //fprintf(fp, "%s", output);
     fclose(fp);
 
