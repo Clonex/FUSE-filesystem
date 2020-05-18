@@ -105,8 +105,12 @@ int createEntry(const char *path, int type)
     {
         return -1; // TODO: error
     }
-
-    cutName(nameArr[getLength(nameArr) - 1], file->name);
+    //cutName(nameArr[getLength(nameArr) - 1], file->name);
+    file->name = nameArr[getLength(nameArr) - 1];
+    if(strlen(file->name) > DEFAULT_NAME_SIZE)
+    {
+        return -1; // TODO: error
+    }
     file->access = ACCESS_READ_WRITE;
 
     entry *targetDir = root_fs;
