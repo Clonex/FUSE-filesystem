@@ -52,6 +52,7 @@ void saveToDisk(entry *file)
 
 char *createBlock(entry file)
 {
+    printf("createBlock(): running..\n");
     char *type;
     sprintf(type, "%d", file.type);
     char *size;
