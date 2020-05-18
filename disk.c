@@ -2,6 +2,7 @@
 
 void restoreImage()
 {
+    char c;
     FILE *fp = fopen("data.img", "r");
     while(1){
      c = fgetc(fp);
