@@ -67,7 +67,7 @@ char *createBlock(entry file)
     printf("wau2\n");
     char *temp[] = {
         pad(file.name, DEFAULT_NAME_SIZE, '/', false), 
-        pad(type, 1, '0', true),
+        type,
         pad(size, 10, '0', true),
         pad(modTime, 12, '0', true),
         pad(accessTime, 12, '0', true)
@@ -86,7 +86,10 @@ char *createBlock(entry file)
     {
         printf("Added to block: %s\n", temp[i]);
         strcat(out, temp[i]);
-        free(temp[i]);
+        if(i != 1)
+        {
+            free(temp[i]);
+        }
     }
 
     return out;
@@ -108,12 +111,13 @@ char *pad(char *value, int length, char padding, bool leftPad)
     }
     printf("pad(): padString: %s\n", padString);
 
+    printf("pad(): strlen(value): %ld, length: %d, diff: %d\n", strlen(value), length, diff);
     char *new = malloc(length);
     if(new == NULL)
     {
         return NULL;
     }
-    printf("pad(): strlen(value): %d, length: %d, diff: %d\n", strlen(value), length, diff);
+    printf("pad(): Malloced\n", padString);
 
     if(leftPad)
     {
@@ -123,7 +127,7 @@ char *pad(char *value, int length, char padding, bool leftPad)
         memcpy(new, value, strlen(value));
         memcpy(new + strlen(value), padString, diff);
     }
-    printf("pad(): free()\n", padString);
+    printf("pad(): free()\n"    );
     free(padString);
     return new;
 }
