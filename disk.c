@@ -105,10 +105,6 @@ char *createBlock(entry file)
     return out;
 }
 
-char *toString(void input, ){
-
-}
-
 char *pad(char *value, int length, char padding, bool leftPad)
 {
     int diff = (length - strlen(value));
