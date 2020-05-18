@@ -100,7 +100,7 @@ char *createBlock(entry file)
 
 char *pad(char *value, int length, char padding, bool leftPad)
 {
-    printf("pad()\n", diff);
+    printf("pad()\n");
     int diff = (length - strlen(value));
     printf("pad(): diff: %d\n", diff);
     char *padString = malloc(diff);
