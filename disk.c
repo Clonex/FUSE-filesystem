@@ -53,10 +53,10 @@ void saveToDisk(entry *file)
 char *createBlock(entry file)
 {
     printf("createBlock(): running..\n");
-    char *type = malloc(sizeof(char));
-    char *size = malloc(10);
-    char *modTime = malloc(12);
-    char *accessTime = malloc(12);
+    char *type = malloc(sizeof(char) * 2);
+    char *size = malloc(10 + 1);
+    char *modTime = malloc(12 + 1);
+    char *accessTime = malloc(12 + 1);
     printf("wau1\n");
 
     sprintf(type, "%d", file.type);
@@ -82,7 +82,7 @@ char *createBlock(entry file)
         return NULL;
     }
     printf("Adding to new block\n");
-    for(int i = 0; i < getLength(temp); i++)
+    for(int i = 0; i < 5; i++)
     {
         printf("Added to block: %s\n", temp[i]);
         strcat(out, temp[i]);

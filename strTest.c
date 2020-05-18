@@ -72,14 +72,19 @@ void main(){
     {
         return;
     }
-    printf("Adding to new block\n");
-    for(int i = 0; i < getLength(temp); i++)
+    printf("Adding to new block, length = %d\n", strlen(temp));
+    for(int i = 0; i < 5; i++)
     {
-        printf("Added to block: %s\n", temp[i]);
+        printf("Adding to block: %s\n", temp[i]);
         strcat(out, temp[i]);
         free(temp[i]);
+        
+        printf("Added to block: %d\n", i);
     }
-
-
+    printf("Huh\n");
+    free(type);
+    free(size);
+    free(modTime);
+    free(accessTime);
     
 }
