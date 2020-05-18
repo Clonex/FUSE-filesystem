@@ -1,20 +1,77 @@
-
+char *removePadding(char *value, char padding, bool leftPad);
 
 void restoreImage()
 {
+    // TODO: check if file exists
+    printf("restoreImage(): starting..\n");
     char c;
     FILE *fp = fopen("data.img", "r");
-    while(1){
-     c = fgetc(fp);
+    
+    entry *newEntry = malloc(sizeof(entry));
+    if(newEntry == NULL){
+        return;
+    }
+    
+    char *buffer = calloc(1, (DEFAULT_NAME_SIZE + 1));
+    fgets(buffer, (DEFAULT_NAME_SIZE + 1), fp);
+    newEntry->name = removePadding(buffer, '/', false);
 
-     if(c == EOF)
-     {
-       break;
-     }else{
-       printf("Got char: %c\n", c);
-     }
-   }
+    buffer = calloc(1, 11);
+    fgets(buffer, 11, fp);
+    newEntry->size = removePadding(buffer, '0', true);
+
+    buffer = calloc(1, 13);
+    fgets(buffer, 13, fp);
+    newEntry->modTime = removePadding(buffer, '0', true);
+
+    buffer = calloc(1, 13);
+    fgets(buffer, 13, fp);
+    newEntry->accessTime = removePadding(buffer, '0', true);
+
+    buffer = calloc(1, 2);
+    fgets(buffer, 2, fp);
+    newEntry->type = (int) buffer;
+
+    printf("File name: %s\n", newEntry->name);
+    printf("File size: %s\n", newEntry->size);
+    printf("File modTime: %s\n", newEntry->modTime);
+    printf("File accessTime: %s\n", newEntry->accessTime);
+    printf("File type: %s\n", newEntry->type);
+    
     fclose(fp);
+}
+
+char *removePadding(char *value, char padding, bool leftPad)
+{
+    if(leftPad)
+    {
+       int i;
+        for(i = strlen(value); i >= 0; i--)
+        {
+            if(value[i] == padding)
+            {
+                break;
+            }
+        }
+        int length = strlen(value) - i;
+        char *newBlock = calloc(1, length);
+        memcpy(newBlock, value + i + 1, length);
+        //strcat(newBlock, value + i);
+        return newBlock;
+    }
+     int i;
+    for(i = 0; i < strlen(value); i++)
+    {
+        if(value[i] == padding)
+        {
+            break;
+        }
+    }
+    
+    char *newBlock = calloc(1, i + 1);
+    memcpy(newBlock, value, i);
+    return newBlock;
+    
 }
 
 void saveToDisk(entry *file)

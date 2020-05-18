@@ -34,7 +34,7 @@ int main()
 	{
 		return -1; // TODO error
 	}
-	root_fs->name = "root";
+	root_fs->name = "";
 	root_fs->type = TYPE_DIR;
 	root_fs->access = ACCESS_READ_WRITE;
 
@@ -51,8 +51,10 @@ int main()
         data[i].name = "";
         data[i].size = 0;
     }
-    createEntry("/test.txt", TYPE_FILE);
-    saveToDisk(root_fs);
+    
+    restoreImage();
+
+    //saveToDisk(root_fs);
 
     free(root_fs->data);
     free(root_fs);
