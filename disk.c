@@ -47,6 +47,12 @@ void saveToDisk(entry *file)
     printf("\nContents: %s\n", output);
     
     free(queue);
+
+    FILE * fp;
+    fp = fopen ("data.img", "w+");
+    fprintf(fp, "%s", output);
+    fclose(fp);
+
     free(output);
 }
 
@@ -91,11 +97,9 @@ char *createBlock(entry file)
 
     if(file.data != NULL)
     {
-        printf("DATA: %s\n", file.data);
-        strcat(out, file.data); 
+        printf("DATA: %s\n", (char *)file.data);
+        strcat(out, (char *)file.data); 
     }
-
-
 
     free(type);
     free(size);
