@@ -53,15 +53,18 @@ void saveToDisk(entry *file)
 char *createBlock(entry file)
 {
     printf("createBlock(): running..\n");
-    char *type;
+    char *type = malloc(sizeof(char));
+    char *size = malloc(10);
+    char *modTime = malloc(12);
+    char *accessTime = malloc(12);
+    printf("wau1\n");
+
     sprintf(type, "%d", file.type);
-    char *size;
     sprintf(size, "%d", file.size);
-    char *modTime;
     sprintf(modTime, "%ld", file.modTime);
-    char *accessTime;
     sprintf(accessTime, "%ld", file.accessTime);
 
+    printf("wau2\n");
     char *temp[] = {
         pad(file.name, DEFAULT_NAME_SIZE, '/', false), 
         pad(type, 1, '0', true),
@@ -70,8 +73,10 @@ char *createBlock(entry file)
         pad(accessTime, 12, '0', true)
     };
     
+    printf("wau3\n");
     int headerSize = DEFAULT_NAME_SIZE + 1 + 10 + 12 + 12;
     char *out = malloc(headerSize + file.size);
+    printf("wau4\n");
     if(out == NULL)
     {
         return NULL;
