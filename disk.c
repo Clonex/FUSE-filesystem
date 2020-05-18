@@ -51,6 +51,7 @@ void saveToDisk(entry *file)
     printf("SAving\n");
     FILE *fp = fopen("data.img", "w+");
     fprintf(fp, "TEST"); 
+    fprintf(fp, "%s", output); 
     //fputc(output, fp);
     //fprintf(fp, "%s", output);
     fclose(fp);
