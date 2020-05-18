@@ -51,7 +51,7 @@ int main()
         data[i].name = "";
         data[i].size = 0;
     }
-
+    createEntry("/test.txt", TYPE_FILE);
     saveToDisk(root_fs);
 
     free(root_fs->data);

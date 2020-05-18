@@ -30,7 +30,6 @@ void saveToDisk(entry *file)
                 inputIndex++;
             }
             char *block = createBlock(currentFile);
-            int orgSize = sizeof(output);
 
             char *tempBlock = calloc(1, (strlen(output) + 1) + (strlen(block) + 1));
             if(tempBlock == NULL)
@@ -89,6 +88,14 @@ char *createBlock(entry file)
     free(tempPad);
     
     strcat(out, type); 
+
+    if(file.data != NULL)
+    {
+        printf("DATA: %s\n", file.data);
+        strcat(out, file.data); 
+    }
+
+
 
     free(type);
     free(size);
