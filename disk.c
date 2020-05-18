@@ -51,12 +51,21 @@ void saveToDisk(entry *file)
 
 char *createBlock(entry file)
 {
+    char *type;
+    sprintf(type, "%d", file.type);
+    char *size;
+    sprintf(size, "%d", file.size);
+    char *modTime;
+    sprintf(modTime, "%ld", file.modTime);
+    char *accessTime;
+    sprintf(accessTime, "%ld", file.accessTime);
+
     char *temp = {
         pad(file.name, DEFAULT_NAME_SIZE, '/', false), 
-        pad(file.type, 1, "0", true),
-        pad(file.size, 10, '0', true),
-        pad(file.modTime, 12, '0', true),
-        pad(file.accessTime, 12, '0', true)
+        pad(type, 1, '0', true),
+        pad(size, 10, '0', true),
+        pad(modTime, 12, '0', true),
+        pad(accessTime, 12, '0', true)
     };
     
     int headerSize = DEFAULT_NAME_SIZE + 1 + 10 + 12 + 12;
@@ -72,12 +81,12 @@ char *createBlock(entry file)
         free(temp[i]);
     }
 
-
-    // char *name = pad(file.name, DEFAULT_NAME_SIZE, '/', false);
-    // char *type = file.type;
-    // char *size = pad(file.size, 10, '0', true);
-    // char *modTime = pad(file.modTime, 12, '0', true);
-    // char *accessTime = pad(file.accessTime, 12, '0', true);
+// char *name = pad(file.name, DEFAULT_NAME_SIZE, '/', false);
+//     char *type = file.type;
+//     char *size = pad(file.size, 10, '0', true);
+//     char *modTime = pad(file.modTime, 12, '0', true);
+//     char *accessTime = pad(file.accessTime, 12, '0', true);
+    
 
     
     
@@ -94,6 +103,10 @@ char *createBlock(entry file)
     // free(modTime);
     // free(accessTime);
     return out;
+}
+
+char *toString(void input, ){
+
 }
 
 char *pad(char *value, int length, char padding, bool leftPad)
