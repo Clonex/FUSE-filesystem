@@ -25,7 +25,7 @@ void saveToDisk(entry *file)
         entry *data = (entry *) folder.data;
         for(int j = 0; j < DEFAULT_DIR_SIZE; j++){
             entry currentFile = data[j];
-            printf("File: %s, Type: %d\n", currentFile.name, currentFile.type);
+            printf("File: %s, Index: %d, j: %d, Type: %d\n", currentFile.name, index, j, currentFile.type);
             if(currentFile.type == TYPE_DIR)
             {
                 printf("Adding to queue! inputIndex: %d\n", inputIndex);
@@ -95,6 +95,7 @@ char *createBlock(entry file)
 char *pad(char *value, int length, char padding, bool leftPad)
 {
     int diff = (length - strlen(value));
+    printf("pad(): diff: %d\n", diff);
     char *padString = malloc(diff);
     if(padString == NULL)
     {
@@ -105,11 +106,15 @@ char *pad(char *value, int length, char padding, bool leftPad)
     {
         memcpy(padString + i, &padding, 1);
     }
+    printf("pad(): padString: %s\n", padString);
+
     char *new = malloc(length);
     if(new == NULL)
     {
         return NULL;
     }
+    printf("pad(): strlen(value): %d, length: %d, diff: %d\n", strlen(value), length, diff);
+
     if(leftPad)
     {
         memcpy(new, padString, diff);
@@ -118,6 +123,7 @@ char *pad(char *value, int length, char padding, bool leftPad)
         memcpy(new, value, strlen(value));
         memcpy(new + strlen(value), padString, diff);
     }
+    printf("pad(): free()\n", padString);
     free(padString);
     return new;
 }

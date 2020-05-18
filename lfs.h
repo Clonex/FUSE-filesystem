@@ -7,7 +7,7 @@
 
 #define TYPE_FILE 1
 #define TYPE_DIR 2
-#define TYPE_BLANK 69
+#define TYPE_BLANK 3
 
 #define DEFAULT_DIR_SIZE 10			// amount
 #define DEFAULT_NAME_SIZE 32 		// length
