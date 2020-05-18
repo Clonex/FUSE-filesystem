@@ -6,6 +6,7 @@ void saveToDisk(entry *file)
     int folders = countFolders(file);
     printf("Total folders: %d\n", folders);
     int length = folders * sizeof(entry);
+    length--;
     entry *queue = malloc(length);
     if(queue == NULL)
     {
@@ -21,7 +22,7 @@ void saveToDisk(entry *file)
 
     memcpy(queue, file, sizeof(entry));
 
-    while(index < length){
+    for(int index = 0; index < length; index++){
         entry folder = queue[index];
         entry *data = (entry *) folder.data;
         for(int j = 0; j < DEFAULT_DIR_SIZE; j++){
@@ -43,7 +44,6 @@ void saveToDisk(entry *file)
             output = tempBlock;
             printf("Output: %s\n", output);
         }
-        index++;
     }
 }
 
