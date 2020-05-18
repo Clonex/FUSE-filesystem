@@ -1,5 +1,6 @@
 int countFolders(entry *file);
 char *createBlock(entry file);
+char *pad(char *value, int length, char padding, bool leftPad);
 
 void saveToDisk(entry *file)
 {
@@ -59,7 +60,7 @@ char *createBlock(entry file)
     };
     
     int headerSize = DEFAULT_NAME_SIZE + 1 + 10 + 12 + 12;
-    char *out = calloc(headerSize + file.size);
+    char *out = malloc(headerSize + file.size);
     if(out == NULL)
     {
         return NULL;
