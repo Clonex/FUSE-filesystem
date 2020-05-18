@@ -17,6 +17,7 @@ void saveToDisk(entry *file)
         return;
     }
     int index = 0;
+    int inputIndex = 0;
 
     memcpy(queue, file, sizeof(entry));
 
@@ -27,8 +28,8 @@ void saveToDisk(entry *file)
             entry currentFile = data[j];
             if(currentFile.type == TYPE_DIR)
             {
-                memcpy(queue + (index * sizeof(entry)), file, sizeof(entry));
-                index++;
+                memcpy(queue + (inputIndex * sizeof(entry)), file, sizeof(entry));
+                inputIndex++;
             }
             char *block = createBlock(currentFile);
             char *tempBlock = malloc((strlen(output) + strlen(block)) * sizeof(char));
@@ -42,6 +43,7 @@ void saveToDisk(entry *file)
             output = tempBlock;
             printf("Output: %s\n", output);
         }
+        index++;
     }
 }
 
