@@ -16,7 +16,7 @@ void saveToDisk(entry *file)
     {
         return;
     }
-    int inputIndex = 0;
+    int inputIndex = 1;
 
     memcpy(queue, file, sizeof(entry));
 
@@ -29,7 +29,8 @@ void saveToDisk(entry *file)
             printf("File: %s, Type: %d\n", currentFile.name, currentFile.type);
             if(currentFile.type == TYPE_DIR)
             {
-                memcpy(queue + (inputIndex * sizeof(entry)), file, sizeof(entry));
+                printf("Adding to queue! inputIndex: %d\n", inputIndex);
+                memcpy(queue + (inputIndex * sizeof(entry)), currentFile, sizeof(entry));
                 inputIndex++;
             }
             char *block = createBlock(currentFile);
