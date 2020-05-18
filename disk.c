@@ -48,9 +48,10 @@ void saveToDisk(entry *file)
     
     free(queue);
 
-    FILE * fp;
-    fp = fopen("data.img", "w+");
-    fputc(output, fp);
+    printf("SAving\n");
+    FILE *fp = fopen("data.img", "w+");
+    fprintf(fp, "TEST"); 
+    //fputc(output, fp);
     //fprintf(fp, "%s", output);
     fclose(fp);
 
