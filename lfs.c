@@ -120,22 +120,23 @@ int lfs_open( const char *path, struct fuse_file_info *fi ) {
 int lfs_write( const char *path, const char *buf, size_t size, off_t offset, struct fuse_file_info *fi ) {
     printf("write(): path=%s, size=%ld, sizeof=%ld, strlen=%ld, offset=%ld\n", path, size, sizeof(buf), strlen(buf), offset);
 	entry *target = (entry *) fi->fh;
-	if(target->data != NULL)
+	if((size + offset) > target->size)
 	{
+		char *mem = malloc(size + offset);
+		if(mem == NULL)
+		{
+			return 0;
+		}
+		memcpy(mem, target->data, offset);
 		free(target->data);
+		target->data = mem;
+		target->size = offset + size;
 	}
-	target->data = malloc(size * sizeof(char));
-	if(target->data == NULL)
-	{
-		return 0;
-	}
-	target->size = size;
 
+	memcpy(target->data + offset, buf, size);
 	time_t stamp;
     time(&stamp);
     target->time = stamp;
-	
-	memcpy(target->data, buf, size);
 	return size;
 }
 
@@ -143,13 +144,21 @@ int lfs_read( const char *path, char *buf, size_t size, off_t offset, struct fus
     printf("read(): path=%s, size:%ld, offset=%ld\n", path, size, offset);
 	entry *source = (entry *) fi->fh;
 	char *data = (char *) source->data;
+	
 	if(source->data == NULL)
 	{
 		printf("read(): Empty data-attr\n");
 		data = "";
 		size = sizeof(data);
 	}
-	memcpy( buf, data, size );
+
+	if((size + offset) > target->size)
+	{
+		memcpy( buf, data + offset, target->size - offset );
+		return target->size - offset;
+	}else{
+		memcpy( buf, data + offset, size );
+	}
 	return size;
 }
 
