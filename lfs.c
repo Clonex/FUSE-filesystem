@@ -118,7 +118,7 @@ int lfs_open( const char *path, struct fuse_file_info *fi ) {
 }
 
 int lfs_write( const char *path, const char *buf, size_t size, off_t offset, struct fuse_file_info *fi ) {
-    printf("write(): path=%s, size=%ld, sizeof=%ld, strlen=%ld\n", path, size, sizeof(buf), strlen(buf));
+    printf("write(): path=%s, size=%ld, sizeof=%ld, strlen=%ld, offset=%ld\n", path, size, sizeof(buf), strlen(buf), offset);
 	entry *target = (entry *) fi->fh;
 	if(target->data != NULL)
 	{
