@@ -5,7 +5,7 @@ void restoreFromDisk()
     
     // TODO: check if file exists
     printf("restoreFromDisk(): starting..\n");
-    char c;
+    char tempBuff[20];
     FILE *fp = fopen("data.img", "r");
 
     while(1)
@@ -28,6 +28,7 @@ void restoreFromDisk()
             char *buffer = calloc(1, (DEFAULT_NAME_SIZE + 1));
             fgets(buffer, (DEFAULT_NAME_SIZE + 1), fp);
             newEntry->name = removePadding(buffer, '/', false);
+            printf("Raw name: %s\n", buffer);
 
             buffer = calloc(1, 11);
             fgets(buffer, 11, fp);
@@ -55,11 +56,13 @@ void restoreFromDisk()
             {
                 newEntry->data = calloc(1, newEntry->size + 2);
                 fgets(newEntry->data, newEntry->size + 2, fp);
-                printf("File data: %s\n", newEntry->data);
+                printf("File data: %s\n..", newEntry->data);
             }
             printf("---\n");
             
         }
+        printf("-------------------------\n");
+        fgets(tempBuff, 0, fp);
      }
     fclose(fp);
 }
