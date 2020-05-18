@@ -18,7 +18,7 @@ void saveToDisk(entry *file)
     }
     int index = 0;
 
-    memcpy(queue, *file, sizeof(entry));
+    memcpy(queue, file, sizeof(entry));
 
     while(index < length){
         entry folder = queue[index];
@@ -27,7 +27,7 @@ void saveToDisk(entry *file)
             entry currentFile = data[j];
             if(currentFile.type == TYPE_DIR)
             {
-                memcpy(queue + (index * sizeof(entry)), *file, sizeof(entry));
+                memcpy(queue + (index * sizeof(entry)), file, sizeof(entry));
                 index++;
             }
             char *block = createBlock(currentFile);
