@@ -49,6 +49,7 @@ int main()
     {
         data[i].type = TYPE_BLANK;
         data[i].name = "";
+        data[i].size = 0;
     }
 
     saveToDisk(root_fs);

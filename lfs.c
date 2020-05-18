@@ -196,6 +196,7 @@ int main( int argc, char *argv[] ) {
     {
         data[i].type = TYPE_BLANK;
 		data[i].name = "";
+        data[i].size = 0;
     }
 
 	fuse_main( argc, argv, &lfs_oper );

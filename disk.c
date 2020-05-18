@@ -9,7 +9,7 @@ void saveToDisk(entry *file)
     {
         return;
     }
-    char *output = malloc(0);
+    char *output = calloc(1, 1);
     if(output == NULL)
     {
         return;
@@ -23,31 +23,37 @@ void saveToDisk(entry *file)
         entry *data = (entry *) folder.data;
         for(int j = 0; j < DEFAULT_DIR_SIZE; j++){
             entry currentFile = data[j];
+            
             if(currentFile.type == TYPE_DIR)
             {
                 memcpy(&queue[inputIndex], &data[j], sizeof(entry));
                 inputIndex++;
             }
             char *block = createBlock(currentFile);
-            char *tempBlock = malloc((strlen(output) + strlen(block)) * sizeof(char));
+            int orgSize = sizeof(output);
+
+            char *tempBlock = calloc(1, (strlen(output) + 1) + (strlen(block) + 1));
             if(tempBlock == NULL)
             {
                 return;
             }
-            memcpy(tempBlock, output, strlen(output) * sizeof(char));
+            strcat(tempBlock, output);
             strcat(tempBlock, block);
+
             free(output);
-            free(block);
             output = tempBlock;
+            free(block);
         }
     }
+    printf("\nContents: %s\n", output);
+    
     free(queue);
     free(output);
 }
 
 char *createBlock(entry file)
 {
-    char *type = malloc(sizeof(char) * 2);
+    char *type = malloc(2);
     char *size = malloc(10 + 1);
     char *modTime = malloc(12 + 1);
     char *accessTime = malloc(12 + 1);
@@ -56,43 +62,46 @@ char *createBlock(entry file)
     sprintf(size, "%d", file.size);
     sprintf(modTime, "%ld", file.modTime);
     sprintf(accessTime, "%ld", file.accessTime);
+    
+    int headerSize = (DEFAULT_NAME_SIZE + 1) + 2 + 11 + 13 + 13;
+    
+    char *out = calloc(1, (headerSize + file.size));
+    if(out == NULL)
+    {
+        printf("Error\n");
+        return NULL;
+    }
 
-    char *temp[] = {
-        pad(file.name, DEFAULT_NAME_SIZE, '/', false), 
-        type,
-        pad(size, 10, '0', true),
-        pad(modTime, 12, '0', true),
-        pad(accessTime, 12, '0', true)
-    };
+    char *tempPad = pad(file.name, DEFAULT_NAME_SIZE, '/', false);
+    strcat(out, tempPad);
+    free(tempPad);
+
+    tempPad = pad(size, 10, '0', true);
+    strcat(out, tempPad);
+    free(tempPad);
+
+    tempPad = pad(modTime, 12, '0', true);
+    strcat(out, tempPad);
+    free(tempPad);
+
+    tempPad = pad(accessTime, 12, '0', true);
+    strcat(out, tempPad);
+    free(tempPad);
+    
+    strcat(out, type); 
 
     free(type);
     free(size);
     free(modTime);
     free(accessTime);
 
-    
-    int headerSize = DEFAULT_NAME_SIZE + 2 + 11 + 13 + 13;
-    char *out = malloc(headerSize + file.size);
-    if(out == NULL)
-    {
-        return NULL;
-    }
-    for(int i = 0; i < 5; i++)
-    {
-        strcat(out, temp[i]);
-        if(i != 1)
-        {
-            free(temp[i]);
-        }
-    }
-
-    return out;
+    return out;    
 }
 
 char *pad(char *value, int length, char padding, bool leftPad)
 {
     int diff = (length - strlen(value));
-    char *padString = malloc(diff);
+    char *padString = calloc(1, diff);
     if(padString == NULL)
     {
         return NULL;
@@ -103,7 +112,7 @@ char *pad(char *value, int length, char padding, bool leftPad)
         memcpy(padString + i, &padding, 1);
     }
 
-    char *new = malloc(length);
+    char *new = calloc(length + 2, sizeof(char));
     if(new == NULL)
     {
         return NULL;
