@@ -41,3 +41,7 @@ int getLength(char **arr);
 void cutName(char* source, char *target);
 
 void printArr(char **arr);
+
+void saveToDisk(entry *file);
+void restoreFromDisk();
+char *removePadding(char *value, char padding, bool leftPad);
