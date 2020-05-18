@@ -6,7 +6,6 @@ void saveToDisk(entry *file)
     int folders = countFolders(file);
     printf("Total folders: %d\n", folders);
     int length = folders * sizeof(entry);
-    length--;
     entry *queue = malloc(length);
     if(queue == NULL)
     {
@@ -17,16 +16,17 @@ void saveToDisk(entry *file)
     {
         return;
     }
-    int index = 0;
     int inputIndex = 0;
 
     memcpy(queue, file, sizeof(entry));
 
     for(int index = 0; index < length; index++){
         entry folder = queue[index];
+        printf("---------\nFolder: %s\n", folder.name);
         entry *data = (entry *) folder.data;
         for(int j = 0; j < DEFAULT_DIR_SIZE; j++){
             entry currentFile = data[j];
+            printf("File: %s, Type: %d\n", currentFile.name, currentFile.type);
             if(currentFile.type == TYPE_DIR)
             {
                 memcpy(queue + (inputIndex * sizeof(entry)), file, sizeof(entry));
