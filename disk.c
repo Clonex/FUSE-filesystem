@@ -1,6 +1,6 @@
 int countFolders(entry file);
 
-void saveToDisk(entry file)
+void saveToDisk(entry *file)
 {
     int folders = countFolders(file);
     printf("Total folders: %d\n", folders);
@@ -13,7 +13,7 @@ void saveToDisk(entry file)
     }*/
 }
 
-int countFolders(entry file)
+int countFolders(entry *file)
 {
     int ret = 1;
     entry *data = (entry *) file->data;
