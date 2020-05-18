@@ -38,8 +38,11 @@ void saveToDisk(entry *file)
             {
                 return;
             }
+            printf("Memcpy()\n");
             memcpy(tempBlock, output, strlen(output) * sizeof(char));
+            printf("strcat()\n");
             strcat(tempBlock, block);
+            printf("free()\n");
             free(output);
             output = tempBlock;
             printf("Output: %s\n", output);
@@ -72,30 +75,14 @@ char *createBlock(entry file)
     {
         return NULL;
     }
-
+    printf("Adding to new block\n");
     for(int i = 0; i < getLength(temp); i++)
     {
+        printf("Added to block: %s\n", temp[i]);
         strcat(out, temp[i]);
         free(temp[i]);
     }
 
-// 
-    
-
-    
-    
-
-    // strcat(out, name);
-    // strcat(out, type);
-    // strcat(out, size);
-    // strcat(out, modTime);
-    // strcat(out, accessTime);
-    // strcat(out, file->data);
-
-    // free(name);
-    // free(size);
-    // free(modTime);
-    // free(accessTime);
     return out;
 }
 
