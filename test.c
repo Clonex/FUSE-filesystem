@@ -52,7 +52,7 @@ int main()
         data[i].size = 0;
     }
     
-    restoreImage();
+    restoreFromDisk();
 
     //saveToDisk(root_fs);
 

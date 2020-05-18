@@ -1,43 +1,54 @@
 char *removePadding(char *value, char padding, bool leftPad);
 
-void restoreImage()
+void restoreFromDisk()
 {
     // TODO: check if file exists
-    printf("restoreImage(): starting..\n");
+    printf("restoreFromDisk(): starting..\n");
     char c;
     FILE *fp = fopen("data.img", "r");
     
-    entry *newEntry = malloc(sizeof(entry));
-    if(newEntry == NULL){
-        return;
+    for(int i = 0; i < DEFAULT_DIR_SIZE; i++)
+    {
+        entry *newEntry = malloc(sizeof(entry));
+        if(newEntry == NULL){
+            return;
+        }
+        
+        char *buffer = calloc(1, (DEFAULT_NAME_SIZE + 1));
+        fgets(buffer, (DEFAULT_NAME_SIZE + 1), fp);
+        newEntry->name = removePadding(buffer, '/', false);
+
+        buffer = calloc(1, 11);
+        fgets(buffer, 11, fp);
+        newEntry->size = atoi(removePadding(buffer, '0', true));
+
+        buffer = calloc(1, 13);
+        fgets(buffer, 13, fp);
+        newEntry->modTime = atoi(removePadding(buffer, '0', true));
+
+        buffer = calloc(1, 13);
+        fgets(buffer, 13, fp);
+        newEntry->accessTime = atoi(removePadding(buffer, '0', true));
+
+        buffer = calloc(1, 2);
+        fgets(buffer, 2, fp);
+        newEntry->type = atoi(buffer);
+
+        printf("File name: %s\n", newEntry->name);
+        printf("File size: %d\n", newEntry->size);
+        printf("File modTime: %d\n", newEntry->modTime);
+        printf("File accessTime: %d\n", newEntry->accessTime);
+        printf("File type: %d\n", newEntry->type);
+        
+        if(newEntry->type == TYPE_FILE)
+        {
+            newEntry->data = calloc(1, newEntry->size + 2);
+            fgets(newEntry->data, newEntry->size + 2, fp);
+            printf("File data: %s\n", newEntry->data);
+        }
+        printf("---\n");
+        
     }
-    
-    char *buffer = calloc(1, (DEFAULT_NAME_SIZE + 1));
-    fgets(buffer, (DEFAULT_NAME_SIZE + 1), fp);
-    newEntry->name = removePadding(buffer, '/', false);
-
-    buffer = calloc(1, 11);
-    fgets(buffer, 11, fp);
-    newEntry->size = removePadding(buffer, '0', true);
-
-    buffer = calloc(1, 13);
-    fgets(buffer, 13, fp);
-    newEntry->modTime = removePadding(buffer, '0', true);
-
-    buffer = calloc(1, 13);
-    fgets(buffer, 13, fp);
-    newEntry->accessTime = removePadding(buffer, '0', true);
-
-    buffer = calloc(1, 2);
-    fgets(buffer, 2, fp);
-    newEntry->type = (int) buffer;
-
-    printf("File name: %s\n", newEntry->name);
-    printf("File size: %s\n", newEntry->size);
-    printf("File modTime: %s\n", newEntry->modTime);
-    printf("File accessTime: %s\n", newEntry->accessTime);
-    printf("File type: %s\n", newEntry->type);
-    
     fclose(fp);
 }
 
