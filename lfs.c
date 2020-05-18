@@ -152,10 +152,10 @@ int lfs_read( const char *path, char *buf, size_t size, off_t offset, struct fus
 		size = sizeof(data);
 	}
 
-	if((size + offset) > target->size)
+	if((size + offset) > source->size)
 	{
-		memcpy( buf, data + offset, target->size - offset );
-		return target->size - offset;
+		memcpy( buf, data + offset, source->size - offset );
+		return source->size - offset;
 	}else{
 		memcpy( buf, data + offset, size );
 	}
