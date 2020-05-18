@@ -199,6 +199,8 @@ int main( int argc, char *argv[] ) {
         data[i].size = 0;
     }
 
+	restoreImage();
+
 	fuse_main( argc, argv, &lfs_oper );
 	return 0;
 }

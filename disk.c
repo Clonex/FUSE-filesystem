@@ -1,5 +1,21 @@
 
 
+void restoreImage()
+{
+    FILE *fp = fopen("data.img", "r");
+    while(1){
+     c = fgetc(fp);
+
+     if(c == EOF)
+     {
+       break;
+     }else{
+       printf("Got char: %c\n", c);
+     }
+   }
+    fclose(fp);
+}
+
 void saveToDisk(entry *file)
 {
     int folders = countFolders(file);
