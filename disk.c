@@ -1,6 +1,6 @@
 
 
-char *entryToString(entry file)
-{
+// char *entryToString(entry file)
+// {
     
-}
+// }

@@ -1,6 +1,7 @@
 entry* findEntry(char **pathArr);
 char **splitString(const char *input, char delimiter, bool includeLast);
 int getLength(char **arr);
+void cutName(char* source, char *target);
 
 /*
  * 
