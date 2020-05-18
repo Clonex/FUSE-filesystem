@@ -50,6 +50,22 @@ int main()
         data[i].name = "";
     }
 
+
+    char *name;
+
+    name = "";
+    printf("length = %ld\n", sizeof(name));
+
+    char test = "ksdfdlksfljklsdkjfjsalfæaslkjfhjklashdfælkjhdsafdlæhasdljkfhælasfhsæa";
+    name = test;
+    if(sizeof(name) > 32)
+    {
+        memcpy(name, name, 32);
+    }
+    
+    printf("length = %ld\n", sizeof(name));
+
+
     //int test = createEntry("/fil", TYPE_FILE);
     /*
         /.
@@ -67,7 +83,7 @@ int main()
     printf("Length = %d\n", count(filTest2));
     printArr(filTest2);*/
 
-    createEntry("/test", TYPE_DIR);
+    //createEntry("/test", TYPE_DIR);
 
     /*createEntry("/mappe", TYPE_DIR);
     createEntry("/mappe/hej.txt", TYPE_FILE);

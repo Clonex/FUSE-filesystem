@@ -36,7 +36,8 @@ int getAttributes(const char *path, struct stat *stbuf){
 			}
 			stbuf->st_nlink = 1;
 			stbuf->st_size = file->size;
-			stbuf->st_mtime = file->time;
+			stbuf->st_mtime = file->modTime;
+			stbuf->st_atime = file->accessTime;
 			return 0;
 		}
 		return -ENOENT;
@@ -93,7 +94,8 @@ int createEntry(const char *path, int type)
     }
     time_t stamp;
     time(&stamp);
-    file->time = stamp;
+    file->accessTime = stamp;
+    file->modTime = stamp;
     file->type = type;
     
     char **nameArr = splitString(path, '/', true);
@@ -102,8 +104,8 @@ int createEntry(const char *path, int type)
     {
         return -1; // TODO: error
     }
-    
-    file->name = nameArr[getLength(nameArr) - 1]; 
+
+    cutName(nameArr[getLength(nameArr) - 1], file->name);
     file->access = ACCESS_READ_WRITE;
 
     entry *targetDir = root_fs;
@@ -119,11 +121,25 @@ int createEntry(const char *path, int type)
         if(data[i].type == TYPE_BLANK)
         {
             data[i] = *file;
-            break;
+            printf("createEntry(): Entry added..\n");
+            return 0;
         }
     }
-    printf("createEntry(): Entry added..\n");
-    return 0;
+    return -1; // TODO: err
+}
+
+/*
+ *
+ */
+void cutName(char* source, char *target)
+{
+    if(strlen(source) > DEFAULT_NAME_SIZE){
+        memcpy( target, source, DEFAULT_NAME_SIZE );
+        target[DEFAULT_NAME_SIZE] = '\0';
+    }else{
+        memcpy( target, source, strlen(source) );
+        target[strlen(source)] = '\0';
+    }
 }
 
 /*

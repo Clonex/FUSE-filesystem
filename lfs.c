@@ -1,5 +1,6 @@
 #include <fuse.h>
 #include "lfs.h" 
+#include "disk.c" 
 #include "implementation.c" 
 
 int lfs_getattr( const char *, struct stat * );
@@ -113,6 +114,11 @@ int lfs_open( const char *path, struct fuse_file_info *fi ) {
 		return -1; // TODO
 	}
 	entry *file = findEntry(tempPath);
+
+	time_t stamp;
+    time(&stamp);
+    file->accessTime = stamp;
+
 	fi->fh = (uint64_t) file;
 	return 0;
 }
@@ -120,6 +126,7 @@ int lfs_open( const char *path, struct fuse_file_info *fi ) {
 int lfs_write( const char *path, const char *buf, size_t size, off_t offset, struct fuse_file_info *fi ) {
     printf("write(): path=%s, size=%ld, sizeof=%ld, strlen=%ld, offset=%ld\n", path, size, sizeof(buf), strlen(buf), offset);
 	entry *target = (entry *) fi->fh;
+
 	if((size + offset) > target->size)
 	{
 		char *mem = malloc(size + offset);
@@ -136,7 +143,7 @@ int lfs_write( const char *path, const char *buf, size_t size, off_t offset, str
 	memcpy(target->data + offset, buf, size);
 	time_t stamp;
     time(&stamp);
-    target->time = stamp;
+    target->modTime = stamp;
 	return size;
 }
 

@@ -1,0 +1,6 @@
+
+
+char *entryToString(entry file)
+{
+    
+}
