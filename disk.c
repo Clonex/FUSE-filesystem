@@ -60,7 +60,7 @@ char *createBlock(entry file)
     char *accessTime;
     sprintf(accessTime, "%ld", file.accessTime);
 
-    char *temp = {
+    char temp[] = {
         pad(file.name, DEFAULT_NAME_SIZE, '/', false), 
         pad(type, 1, '0', true),
         pad(size, 10, '0', true),
@@ -81,11 +81,7 @@ char *createBlock(entry file)
         free(temp[i]);
     }
 
-// char *name = pad(file.name, DEFAULT_NAME_SIZE, '/', false);
-//     char *type = file.type;
-//     char *size = pad(file.size, 10, '0', true);
-//     char *modTime = pad(file.modTime, 12, '0', true);
-//     char *accessTime = pad(file.accessTime, 12, '0', true);
+// 
     
 
     
