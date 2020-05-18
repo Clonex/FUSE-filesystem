@@ -1,4 +1,4 @@
-int countFolders(entry file);
+int countFolders(entry *file);
 
 void saveToDisk(entry *file)
 {
