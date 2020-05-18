@@ -45,7 +45,6 @@ void saveToDisk(entry *file)
         }
     }
     printf("\nContents: %s\n", output);
-    
     free(queue);
 
     printf("SAving\n");
