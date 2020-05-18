@@ -22,7 +22,7 @@ void saveToDisk(entry *file)
 
     while(index < length){
         entry folder = queue[index];
-        entry *data = (entry *) folder->data;
+        entry *data = (entry *) folder.data;
         for(int j = 0; j < DEFAULT_DIR_SIZE; j++){
             entry currentFile = data[j];
             if(currentFile.type == TYPE_DIR)
