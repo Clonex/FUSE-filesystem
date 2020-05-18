@@ -50,7 +50,79 @@ void saveToDisk(entry *file)
 
 char *createBlock(entry file)
 {
-    return file.name;
+    char *temp = {
+        pad(file.name, DEFAULT_NAME_SIZE, '/', false), 
+        pad(file.type, 1, "0", true),
+        pad(file.size, 10, '0', true),
+        pad(file.modTime, 12, '0', true),
+        pad(file.accessTime, 12, '0', true)
+    };
+    
+    int headerSize = DEFAULT_NAME_SIZE + 1 + 10 + 12 + 12;
+    char *out = calloc(headerSize + file.size);
+    if(out == NULL)
+    {
+        return NULL;
+    }
+
+    for(int i = 0; i < getLength(temp); i++)
+    {
+        strcat(out, temp[i]);
+        free(temp[i]);
+    }
+
+
+    // char *name = pad(file.name, DEFAULT_NAME_SIZE, '/', false);
+    // char *type = file.type;
+    // char *size = pad(file.size, 10, '0', true);
+    // char *modTime = pad(file.modTime, 12, '0', true);
+    // char *accessTime = pad(file.accessTime, 12, '0', true);
+
+    
+    
+
+    // strcat(out, name);
+    // strcat(out, type);
+    // strcat(out, size);
+    // strcat(out, modTime);
+    // strcat(out, accessTime);
+    // strcat(out, file->data);
+
+    // free(name);
+    // free(size);
+    // free(modTime);
+    // free(accessTime);
+    return out;
+}
+
+char *pad(char *value, int length, char padding, bool leftPad)
+{
+    int diff = (length - strlen(value));
+    char *padString = malloc(diff);
+    if(padString == NULL)
+    {
+        return;
+    }
+    
+    for(int i = 0; i < diff; i++)
+    {
+        memcpy(padString + i, &padding, 1);
+    }
+    char *new = malloc(length);
+    if(new == NULL)
+    {
+        return;
+    }
+    if(leftPad)
+    {
+        memcpy(new, padString, diff);
+        memcpy(new + diff, value, strlen(value));
+    }else{ // Right pad
+        memcpy(new, value, strlen(value));
+        memcpy(new + strlen(value), padString, diff);
+    }
+    free(padString);
+    return new;
 }
 
 int countFolders(entry *file)
