@@ -1,7 +1,4 @@
-entry* findEntry(char **pathArr);
-char **splitString(const char *input, char delimiter, bool includeLast);
-int getLength(char **arr);
-void cutName(char* source, char *target);
+
 
 /*
  * 
@@ -109,7 +106,7 @@ int createEntry(const char *path, int type)
     file->name = nameArr[getLength(nameArr) - 1];
     if(strlen(file->name) > DEFAULT_NAME_SIZE)
     {
-        return -36; // TODO: error
+        return -36; // 
     }
     file->access = ACCESS_READ_WRITE;
 

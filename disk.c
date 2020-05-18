@@ -1,6 +1,4 @@
-int countFolders(entry *file);
-char *createBlock(entry file);
-char *pad(char *value, int length, char padding, bool leftPad);
+
 
 void saveToDisk(entry *file)
 {
@@ -60,7 +58,7 @@ char *createBlock(entry file)
     char *accessTime;
     sprintf(accessTime, "%ld", file.accessTime);
 
-    char temp[] = {
+    char *temp[] = {
         pad(file.name, DEFAULT_NAME_SIZE, '/', false), 
         pad(type, 1, '0', true),
         pad(size, 10, '0', true),
@@ -107,7 +105,7 @@ char *pad(char *value, int length, char padding, bool leftPad)
     char *padString = malloc(diff);
     if(padString == NULL)
     {
-        return;
+        return NULL;
     }
     
     for(int i = 0; i < diff; i++)
@@ -117,7 +115,7 @@ char *pad(char *value, int length, char padding, bool leftPad)
     char *new = malloc(length);
     if(new == NULL)
     {
-        return;
+        return NULL;
     }
     if(leftPad)
     {
