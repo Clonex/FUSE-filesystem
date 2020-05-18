@@ -44,10 +44,13 @@ void saveToDisk(entry *file)
             strcat(tempBlock, block);
             printf("free()\n");
             free(output);
+            free(block);
             output = tempBlock;
             printf("Output: %s\n", output);
         }
     }
+    printf("Done..\n");
+    free(queue);
 }
 
 char *createBlock(entry file)
@@ -74,7 +77,7 @@ char *createBlock(entry file)
     };
     
     printf("wau3\n");
-    int headerSize = DEFAULT_NAME_SIZE + 1 + 10 + 12 + 12;
+    int headerSize = DEFAULT_NAME_SIZE + 2 + 11 + 13 + 13;
     char *out = malloc(headerSize + file.size);
     printf("wau4\n");
     if(out == NULL)
@@ -97,6 +100,7 @@ char *createBlock(entry file)
 
 char *pad(char *value, int length, char padding, bool leftPad)
 {
+    printf("pad()\n", diff);
     int diff = (length - strlen(value));
     printf("pad(): diff: %d\n", diff);
     char *padString = malloc(diff);
@@ -117,7 +121,7 @@ char *pad(char *value, int length, char padding, bool leftPad)
     {
         return NULL;
     }
-    printf("pad(): Malloced\n", padString);
+    printf("pad(): Malloced\n");
 
     if(leftPad)
     {
