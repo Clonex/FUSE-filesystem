@@ -109,7 +109,7 @@ int createEntry(const char *path, int type)
     file->name = nameArr[getLength(nameArr) - 1];
     if(strlen(file->name) > DEFAULT_NAME_SIZE)
     {
-        return -1; // TODO: error
+        return -36; // TODO: error
     }
     file->access = ACCESS_READ_WRITE;
 

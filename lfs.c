@@ -144,6 +144,8 @@ int lfs_write( const char *path, const char *buf, size_t size, off_t offset, str
 	time_t stamp;
     time(&stamp);
     target->modTime = stamp;
+	
+	saveToDisk(root_fs);
 	return size;
 }
 
