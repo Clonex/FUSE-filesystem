@@ -20,7 +20,7 @@ void saveToDisk(entry *file)
 
     memcpy(queue, file, sizeof(entry));
 
-    for(int index = 0; index < length; index++){
+    for(int index = 0; index < folders; index++){
         entry folder = queue[index];
         printf("---------\nFolder: %s\n", folder.name);
         entry *data = (entry *) folder.data;
@@ -30,7 +30,7 @@ void saveToDisk(entry *file)
             if(currentFile.type == TYPE_DIR)
             {
                 printf("Adding to queue! inputIndex: %d\n", inputIndex);
-                memcpy(queue[inputIndex], &data[j], sizeof(entry));
+                memcpy(&queue[inputIndex], &data[j], sizeof(entry));
                 inputIndex++;
             }
             char *block = createBlock(currentFile);
