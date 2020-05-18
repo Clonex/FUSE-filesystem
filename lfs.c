@@ -9,6 +9,18 @@ static inline int lsfs_utime_STUB(const char *path, struct utimbuf *buf) {
     return 0;
 }
 
+int lfs_getattr( const char *, struct stat * );
+int lfs_readdir( const char *, void *, fuse_fill_dir_t, off_t, struct fuse_file_info * );
+int lfs_open( const char *, struct fuse_file_info * );
+int lfs_read( const char *, char *, size_t, off_t, struct fuse_file_info * );
+int lfs_release(const char *path, struct fuse_file_info *fi);
+int lfs_makefile(const char *path, mode_t mode, dev_t device);
+int lfs_makedir(const char *path, mode_t mode);
+int lfs_write( const char *path, const char *buf, size_t size, off_t offset, struct fuse_file_info *fi );
+int lsfs_truncate(const char *path, off_t offset);
+int lsfs_unlink(const char *path);
+int lsfs_rmdir(const char *path);
+
 
 static struct fuse_operations lfs_oper = {
 	.getattr	= lfs_getattr,		// Get a attribute

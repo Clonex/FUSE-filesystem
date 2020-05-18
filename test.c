@@ -1,5 +1,6 @@
 #include "lfs.h" 
 #include "implementation.c" 
+#include "disk.c" 
 
 void printArr(char **arr)
 {
@@ -50,8 +51,11 @@ int main()
         data[i].name = "";
     }
 
+    saveToDisk(root_fs);
 
-    char *name;
+    free(root_fs->data);
+    free(root_fs);
+    /*char *name;
 
     name = "";
     printf("length = %ld\n", sizeof(name));
@@ -63,7 +67,7 @@ int main()
         memcpy(name, name, 32);
     }
     
-    printf("length = %ld\n", sizeof(name));
+    printf("length = %ld\n", sizeof(name));*/
 
 
     //int test = createEntry("/fil", TYPE_FILE);
