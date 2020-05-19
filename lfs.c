@@ -49,6 +49,7 @@ int lfs_getattr( const char *path, struct stat *stbuf ) {
 }
 
 int lfs_truncate(const char *path, off_t offset) {
+	printf("Truncating!\n");	
 	return 0;
 }
 
@@ -124,7 +125,7 @@ int lfs_open( const char *path, struct fuse_file_info *fi ) {
 
 int lfs_write( const char *path, const char *buf, size_t size, off_t offset, struct fuse_file_info *fi ) {
     printf("write(): path=%s, size=%ld, sizeof=%ld, strlen=%ld, offset=%ld\n", path, size, sizeof(buf), strlen(buf), offset);
-	printf("Attemping to write %s to the file\n", buf);
+	printf("Attemping to write \"%s\" to the file\n", buf);
 	entry *target = (entry *) fi->fh;
 	int tempSize = size;
 
