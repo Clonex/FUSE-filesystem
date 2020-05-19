@@ -110,7 +110,7 @@ int lfs_open( const char *path, struct fuse_file_info *fi ) {
 	char **tempPath = splitString(path, '/', true);
 	if(tempPath == NULL)
 	{
-		return -ENOMEM; // TODO
+		return -ENOMEM;
 	}
 	entry *file = findEntry(tempPath);
 
@@ -118,7 +118,7 @@ int lfs_open( const char *path, struct fuse_file_info *fi ) {
     time(&stamp);
     file->accessTime = stamp;
 
-	fi->fh = (uint64_t) file;
+	fi->fh = (uint64_t) file; // the file entry is saved for later use (especially in read and write)
 	return 0;
 }
 
@@ -128,14 +128,14 @@ int lfs_write( const char *path, const char *buf, size_t size, off_t offset, str
 	entry *target = (entry *) fi->fh;
 	int tempSize = size;
 
-	if((tempSize + offset) > target->size) // 
+	if((tempSize + offset) > target->size) // requested write exceeds the already allocated size of the file, new memory must be allocated
 	{
 		char *mem = calloc(1, tempSize + offset);
 		if(mem == NULL)
 		{
 			return 0;
 		}
-		memcpy(mem, target->data, offset);
+		memcpy(mem, target->data, offset); // existing data before the offset is kept intact
 		free(target->data);
 		target->data = mem;
 		target->size = offset + tempSize;
