@@ -13,7 +13,6 @@ int getAttributes(const char *path, struct stat *stbuf){
 			return -ENOMEM;
 		}
 		int length = getLength(tempPath);
-		char *fileName = tempPath[length - 1];
 		entry *file = findEntry(tempPath);
 		if(file != NULL)
 		{
