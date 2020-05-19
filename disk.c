@@ -10,7 +10,7 @@ void restoreFromDisk()
     {
         return;
     }
-
+    printf("huh\n");
     entry *queue = calloc(1, sizeof(entry));
     if(queue == NULL)
     {
@@ -21,16 +21,19 @@ void restoreFromDisk()
     int queueLength = 1;
     memcpy(queue, root_fs, sizeof(entry));
     int index = 0;
+    printf("huh1\n");
 
     while(index < queueLength){
         entry folder = queue[index];
         entry *data = (entry *) folder.data;
+        printf("huh2\n");
 
         for(int j = 0; j < DEFAULT_DIR_SIZE; j++){
             entry *newEntry = malloc(sizeof(entry));
             if(newEntry == NULL){
                 return;
             }
+            printf("huh3\n");
             
             char *buffer = calloc(1, (DEFAULT_NAME_SIZE + 1));
             if(fgets(buffer, (DEFAULT_NAME_SIZE + 1), fp) == NULL)
@@ -38,28 +41,28 @@ void restoreFromDisk()
                 return;
             }
             newEntry->name = removePadding(buffer, '/', false);
-
+            printf("huh4\n");
             buffer = calloc(1, 11);
             if(fgets(buffer, 11, fp) == NULL)
             {
                 return;
             }
             newEntry->size = atoi(buffer);
-
+            printf("huh5\n");
             buffer = calloc(1, 13);
             if(fgets(buffer, 13, fp) == NULL)
             {
                 return;
             }
             newEntry->modTime = atoi(buffer);
-
+            printf("huh6\n");
             buffer = calloc(1, 13);
             if(fgets(buffer, 13, fp) == NULL)
             {
                 return;
             }
             newEntry->accessTime = atoi(buffer);
-
+            printf("huh7\n");
             buffer = calloc(1, 2);
             if(fgets(buffer, 2, fp) == NULL)
             {
@@ -68,10 +71,10 @@ void restoreFromDisk()
             newEntry->type = atoi(buffer);
 
             free(buffer);
-
+            printf("huh8\n");
             if(newEntry->type == TYPE_FILE)
             {
-                printf("newEntry->size = %d, strlen(newEntry->data) = %d\n", newEntry->size, strlen(newEntry->data));
+                printf("newEntry->size = %d, strlen(newEntry->data) = %ld\n", newEntry->size, strlen(newEntry->data));
                 newEntry->data = calloc(1, newEntry->size + 2);
                 if(fgets(newEntry->data, newEntry->size + 2, fp) == NULL){
                     return;
