@@ -91,6 +91,8 @@ void restoreFromDisk()
                 inputIndex++;
             }
 
+            printf("newEntry->name = %s\n", newEntry->name);
+            printf("newEntry->type = %d\n", newEntry->type);
             memcpy(&data[j], newEntry, sizeof(entry));
          
         }
