@@ -45,3 +45,5 @@ void printArr(char **arr);
 void saveToDisk(entry *file);
 void restoreFromDisk();
 char *removePadding(char *value, char padding, bool leftPad);
+
+int getAttributes(const char *path, struct stat *stbuf);
