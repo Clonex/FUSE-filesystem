@@ -94,12 +94,10 @@ int lfs_readdir( const char *path, void *buf, fuse_fill_dir_t filler, off_t offs
 	char **tempPath = splitString(path, '/', true);
 	printArr(tempPath);
 	entry *dir = findEntry(tempPath);
-	printf("readdir(): name = %s\n\n", dir->name);
 	entry *files = (entry *) dir->data;
 	for(int fileI = 0; fileI < DEFAULT_DIR_SIZE; fileI++){
 		if(files[fileI].type != TYPE_BLANK){
 			filler(buf, files[fileI].name, NULL, 0);
-			printf("readdir(): file: %s\n", files[fileI].name);
 		}
 	}
 	
@@ -157,7 +155,6 @@ int lfs_read( const char *path, char *buf, size_t size, off_t offset, struct fus
 	
 	if(source->data == NULL)
 	{
-		printf("read(): Empty data-attr\n");
 		data = "";
 		size = sizeof(data);
 	}

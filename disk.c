@@ -55,7 +55,6 @@ void restoreFromDisk()
             {
                 newEntry->data = calloc(1, newEntry->size + 2);
                 fgets(newEntry->data, newEntry->size + 2, fp);
-                printf("File data: %s\n..", newEntry->data);
             }else if(newEntry->type == TYPE_DIR)
             {
                 newEntry->size = sizeof(entry) * DEFAULT_DIR_SIZE;
