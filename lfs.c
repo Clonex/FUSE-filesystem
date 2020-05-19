@@ -203,21 +203,3 @@ int main( int argc, char *argv[] ) {
 	fuse_main( argc, argv, &lfs_oper );
 	return 0;
 }
-
-
-void printArr(char **arr)
-{
-    printf("[");
-    int length = getLength(arr);
-    for(int i = 0; i < length; i++)
-    {
-        if(i == 0)
-        {
-            printf("\"%s\"", arr[i]);
-        }else{
-            printf(" ,\"%s\"", arr[i]);
-        }
-    }
-    printf("]\n");
-
-}
