@@ -23,8 +23,6 @@ typedef struct entry {
 } entry;
 
 entry* root_fs;
-
-
 int countFolders(entry *file);
 char *createBlock(entry file);
 char *pad(char *value, int length, char padding, bool leftPad);

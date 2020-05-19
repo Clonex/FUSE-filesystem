@@ -1,4 +1,3 @@
-char *removePadding(char *value, char padding, bool leftPad);
 
 /*
  *

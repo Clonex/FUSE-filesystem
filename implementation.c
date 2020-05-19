@@ -12,7 +12,7 @@ int getAttributes(const char *path, struct stat *stbuf){
 		char **tempPath = splitString(path, '/', true);
 		if(tempPath == NULL)
 		{
-			return -ENOMEM; // TODO
+			return -ENOMEM;
 		}
 		int length = getLength(tempPath);
 		char *fileName = tempPath[length - 1];
@@ -118,20 +118,6 @@ int createEntry(const char *path, int type)
         }
     }
     return -ENFILE;
-}
-
-/*
- *
- */
-void cutName(char* source, char *target)
-{
-    if(strlen(source) > DEFAULT_NAME_SIZE){
-        memcpy( target, source, DEFAULT_NAME_SIZE );
-        target[DEFAULT_NAME_SIZE] = '\0';
-    }else{
-        memcpy( target, source, strlen(source) );
-        target[strlen(source)] = '\0';
-    }
 }
 
 /*
