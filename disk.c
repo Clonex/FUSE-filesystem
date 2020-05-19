@@ -1,6 +1,6 @@
 
 /*
- *
+ * Checks whether the data.img file exists, and restores tile root_fs from it.
  */
 void restoreFromDisk()
 {
@@ -55,6 +55,7 @@ void restoreFromDisk()
             {
                 newEntry->data = calloc(1, newEntry->size + 1);
                 fgets(newEntry->data, newEntry->size, fp);
+                printf("File data: '%s'\n", newEntry->data);
             }else if(newEntry->type == TYPE_DIR)
             {
                 newEntry->size = sizeof(entry) * DEFAULT_DIR_SIZE;
@@ -80,7 +81,7 @@ void restoreFromDisk()
 }
 
 /*
- *
+ * Removes padding from a given string.
  */
 char *removePadding(char *value, char padding, bool leftPad)
 {
@@ -117,13 +118,13 @@ char *removePadding(char *value, char padding, bool leftPad)
 }
 
 /*
- *
+ * Converts the @param file to a string and writes it to disk.
  */
 void saveToDisk(entry *file)
 {
     int folders = countFolders(file);
     int length = folders * sizeof(entry);
-    entry *queue = malloc(length);
+    entry *queue = malloc(length); // Contains the next
     if(queue == NULL)
     {
         return;
@@ -173,7 +174,7 @@ void saveToDisk(entry *file)
 }
 
 /*
- *
+ * Converts a entry into a string representation.
  */
 char *createBlock(entry file)
 {
@@ -188,6 +189,7 @@ char *createBlock(entry file)
         tempSize = strlen(file.data) + 1;
     }
 
+    // Converts the values into strings.
     sprintf(type, "%d", file.type);
     sprintf(size, "%d", tempSize);
     sprintf(modTime, "%ld", file.modTime);
@@ -201,6 +203,7 @@ char *createBlock(entry file)
         return NULL;
     }
 
+    // Pads the strings, and adds them to the output string.
     char *tempPad = pad(file.name, DEFAULT_NAME_SIZE, '/', false);
     strcat(out, tempPad);
     free(tempPad);
@@ -233,7 +236,7 @@ char *createBlock(entry file)
 }
 
 /*
- *
+ * Pads the given string with the given char.
  */
 char *pad(char *value, int length, char padding, bool leftPad)
 {
@@ -268,7 +271,7 @@ char *pad(char *value, int length, char padding, bool leftPad)
 }
 
 /*
- *
+ * Counts the total folders for a given entry.
  */
 int countFolders(entry *file)
 {
