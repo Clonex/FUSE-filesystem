@@ -71,8 +71,8 @@ void restoreFromDisk()
 
             if(newEntry->type == TYPE_FILE)
             {
-                newEntry->data = calloc(1, strlen(newEntry->size) /*+ 2*/);
-                if(fgets(newEntry->data, strlen(newEntry->size) /*+ 2*/, fp) == NULL){
+                newEntry->data = calloc(1, strlen(newEntry->data) /*+ 2*/);
+                if(fgets(newEntry->data, strlen(newEntry->data) /*+ 2*/, fp) == NULL){
                     return;
                 }
                 printf("File data: '%s'\n", newEntry->data);
