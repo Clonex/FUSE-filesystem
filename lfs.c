@@ -125,9 +125,11 @@ int lfs_open( const char *path, struct fuse_file_info *fi ) {
 
 int lfs_write( const char *path, const char *buf, size_t size, off_t offset, struct fuse_file_info *fi ) {
     printf("write(): path=%s, size=%ld, sizeof=%ld, strlen=%ld, offset=%ld\n", path, size, sizeof(buf), strlen(buf), offset);
+	
 	entry *target = (entry *) fi->fh;
 	int tempSize = strlen(buf) + 1;
-	if((tempSize + offset) > target->size)
+
+	if((tempSize + offset) > target->size) // 
 	{
 		char *mem = calloc(1, tempSize + offset);
 		if(mem == NULL)
@@ -153,20 +155,19 @@ int lfs_read( const char *path, char *buf, size_t size, off_t offset, struct fus
 	entry *source = (entry *) fi->fh;
 	char *data = (char *) source->data;
 	
-	if(source->data == NULL)
+	if(source->data == NULL) // nothing has been written to the file
 	{
-		data = "";
-		size = sizeof(data);
+		return 0;
 	}
 
-	if((size + offset) > source->size)
+	if((size + offset) > source->size) // requested read exceeds the contents of the file, read to end of file
 	{
 		memcpy( buf, data + offset, source->size - offset );
 		return source->size - offset;
 	}else{
 		memcpy( buf, data + offset, size );
+		return size;
 	}
-	return size;
 }
 
 int lfs_release(const char *path, struct fuse_file_info *fi) {
