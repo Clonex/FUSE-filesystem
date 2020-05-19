@@ -1,6 +1,6 @@
 
 /*
- *
+ * Checks whether the data.img file exists, and restores tile root_fs from it.
  */
 void restoreFromDisk()
 {
@@ -80,7 +80,7 @@ void restoreFromDisk()
 }
 
 /*
- *
+ * Removes padding from a given string.
  */
 char *removePadding(char *value, char padding, bool leftPad)
 {
@@ -117,7 +117,7 @@ char *removePadding(char *value, char padding, bool leftPad)
 }
 
 /*
- *
+ * Converts the @param file to a string and writes it to disk.
  */
 void saveToDisk(entry *file)
 {
@@ -173,7 +173,7 @@ void saveToDisk(entry *file)
 }
 
 /*
- *
+ * Converts a entry into a string representation.
  */
 char *createBlock(entry file)
 {
@@ -233,7 +233,7 @@ char *createBlock(entry file)
 }
 
 /*
- *
+ * Pads the given string with the given char.
  */
 char *pad(char *value, int length, char padding, bool leftPad)
 {
@@ -268,7 +268,7 @@ char *pad(char *value, int length, char padding, bool leftPad)
 }
 
 /*
- *
+ * Counts the total folders for a given entry.
  */
 int countFolders(entry *file)
 {

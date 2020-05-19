@@ -126,7 +126,7 @@ int lfs_write( const char *path, const char *buf, size_t size, off_t offset, str
     printf("write(): path=%s, size=%ld, sizeof=%ld, strlen=%ld, offset=%ld\n", path, size, sizeof(buf), strlen(buf), offset);
 	
 	entry *target = (entry *) fi->fh;
-	int tempSize = size + 1;//strlen(buf) + 1;
+	int tempSize = size;
 
 	if((tempSize + offset) > target->size) // 
 	{
