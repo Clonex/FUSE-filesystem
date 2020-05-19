@@ -28,7 +28,7 @@ void restoreFromDisk()
             char *buffer = calloc(1, (DEFAULT_NAME_SIZE + 1));
             fgets(buffer, (DEFAULT_NAME_SIZE + 1), fp);
             newEntry->name = removePadding(buffer, '/', false);
-            printf("Raw name: %s\n", buffer);
+            printf("Raw name: '%s'\n", buffer);
 
             buffer = calloc(1, 11);
             fgets(buffer, 11, fp);
@@ -46,11 +46,11 @@ void restoreFromDisk()
             fgets(buffer, 2, fp);
             newEntry->type = atoi(buffer);
 
-            printf("File name: %s\n", newEntry->name);
-            printf("File size: %d\n", newEntry->size);
-            printf("File modTime: %d\n", newEntry->modTime);
-            printf("File accessTime: %d\n", newEntry->accessTime);
-            printf("File type: %d\n", newEntry->type);
+            printf("File name: '%s'\n", newEntry->name);
+            printf("File size: '%d'\n", newEntry->size);
+            printf("File modTime: '%ld'\n", newEntry->modTime);
+            printf("File accessTime: '%ld'\n", newEntry->accessTime);
+            printf("File type: '%d'\n", newEntry->type);
             
             if(newEntry->type == TYPE_FILE)
             {
@@ -61,7 +61,7 @@ void restoreFromDisk()
             printf("---\n");
             
         }
-        printf("-------------------------\n");
+        printf("------------ NEW FOLDER -------------\n");
         fgets(tempBuff, 0, fp);
      }
     fclose(fp);

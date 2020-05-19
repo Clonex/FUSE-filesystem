@@ -27,6 +27,23 @@ int count(char **arr)
     return count;
 }
 
+
+int totalSize(entry *file)
+{
+    int ret = 0;
+    entry *data = (entry *) file->data;
+    for(int i = 0; i < DEFAULT_DIR_SIZE; i++){
+        entry current = data[i];
+        if(current.type == TYPE_DIR)
+        {
+            ret += countFolders(&current);
+        }
+        ret += (DEFAULT_NAME_SIZE + 1) + 2 + 11 + 13 + 13;
+        ret += current.size;
+    }
+    return ret;
+}
+
 int main()
 {
     root_fs = malloc(sizeof(struct entry));
@@ -34,7 +51,7 @@ int main()
 	{
 		return -1; // TODO error
 	}
-	root_fs->name = "";
+	root_fs->name = "hejsa";
 	root_fs->type = TYPE_DIR;
 	root_fs->access = ACCESS_READ_WRITE;
 
@@ -58,6 +75,20 @@ int main()
 
     free(root_fs->data);
     free(root_fs);
+    /*int fsSize = totalSize(root_fs);
+    FILE *fp = fopen("other.img", "w+");
+    fwrite(root_fs, 1, fsSize, fp);
+    fclose(fp);
+
+    
+
+    entry* local = malloc(fsSize);
+	printf("3\n");
+	int written = fread(local, fsSize, 1, fp);
+    printf("Hmm, size: %d, name: %s\n", sizeof(local), local->name);
+
+
+    */
     /*char *name;
 
     name = "";
@@ -109,3 +140,4 @@ int main()
 	}*/
     //printf("%d\n", test);//a
 }
+
