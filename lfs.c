@@ -130,7 +130,7 @@ int lfs_open( const char *path, struct fuse_file_info *fi ) {
 int lfs_write( const char *path, const char *buf, size_t size, off_t offset, struct fuse_file_info *fi ) {
     printf("write(): path=%s, size=%ld, sizeof=%ld, strlen=%ld, offset=%ld\n", path, size, sizeof(buf), strlen(buf), offset);
 	entry *target = (entry *) fi->fh;
-	printf("File data: %s\n", (char *) file->data);
+	printf("File data: %s\n", (char *) target->data);
 	if((size + offset) > target->size)
 	{
 		char *mem = calloc(1, size + offset);
@@ -143,16 +143,16 @@ int lfs_write( const char *path, const char *buf, size_t size, off_t offset, str
 		target->data = mem;
 		target->size = offset + size;
 	}
-	printf("File data: %s\n", (char *) file->data);
+	printf("File data: %s\n", (char *) target->data);
 
 	memcpy(target->data + offset, buf, size);
 	time_t stamp;
     time(&stamp);
     target->modTime = stamp;
-	printf("File data: %s\n", (char *) file->data);
+	printf("File data: %s\n", (char *) target->data);
 	
 	saveToDisk(root_fs);
-	printf("File data: %s\n", (char *) file->data);
+	printf("File data: %s\n", (char *) target->data);
 	return size;
 }
 
