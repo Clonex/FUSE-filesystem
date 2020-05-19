@@ -131,9 +131,10 @@ int lfs_write( const char *path, const char *buf, size_t size, off_t offset, str
     printf("write(): path=%s, size=%ld, sizeof=%ld, strlen=%ld, offset=%ld\n", path, size, sizeof(buf), strlen(buf), offset);
 	entry *target = (entry *) fi->fh;
 	printf("File data: %s\n", (char *) target->data);
-	if((size + offset) > target->size)
+	int tempSize = strlen(buf) + 1;
+	if((tempSize + offset) > target->size)
 	{
-		char *mem = calloc(1, size + offset);
+		char *mem = calloc(1, tempSize + offset);
 		if(mem == NULL)
 		{
 			return 0;
@@ -141,11 +142,11 @@ int lfs_write( const char *path, const char *buf, size_t size, off_t offset, str
 		memcpy(mem, target->data, offset);
 		free(target->data);
 		target->data = mem;
-		target->size = offset + size;
+		target->size = offset + tempSize;
 	}
 	printf("File data: %s\n", (char *) target->data);
-
-	memcpy(target->data + offset, buf, size);
+	strcat(target->data, buf);
+	//memcpy(target->data + offset, buf, tempSize);
 	time_t stamp;
     time(&stamp);
     target->modTime = stamp;
