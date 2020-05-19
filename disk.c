@@ -56,8 +56,8 @@ void restoreFromDisk()
 
             if(newEntry->type == TYPE_FILE)
             {
-                newEntry->data = calloc(1, newEntry->size);
-                fgets(newEntry->data, newEntry->size, fp);
+                newEntry->data = calloc(1, newEntry->size + 2);
+                fgets(newEntry->data, newEntry->size + 2, fp);
                 printf("File data: '%s'\n", newEntry->data);
             }else if(newEntry->type == TYPE_DIR)
             {
