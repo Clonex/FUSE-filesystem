@@ -189,7 +189,7 @@ char *createBlock(entry file)
     strcat(out, tempPad);
     free(tempPad);
 
-    tempPad = pad(size, 10, '0', true);
+    tempPad = pad(tempSize, 10, '0', true);
     strcat(out, tempPad);
     free(tempPad);
 
