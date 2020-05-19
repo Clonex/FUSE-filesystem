@@ -19,6 +19,7 @@ all: lfs
 
 lfs: $(OBJS)
 	$(GCC) $(OBJS) $(LIBS) $(CFLAGS) -o lfs
+	rm data.img
 
 clean:
 	rm -f $(OBJS) test lfs
