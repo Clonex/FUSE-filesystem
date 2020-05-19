@@ -26,6 +26,7 @@ void restoreFromDisk()
         entry *data = (entry *) folder.data;
 
         for(int j = 0; j < DEFAULT_DIR_SIZE; j++){
+            printf("j: %d\n", j);
             entry *newEntry = malloc(sizeof(entry));
             if(newEntry == NULL){
                 return;
@@ -36,6 +37,7 @@ void restoreFromDisk()
             {
                 return;
             }
+            printf("name = %s\n", buffer);
             newEntry->name = removePadding(buffer, '/', false);
 
             buffer = calloc(1, 11);
@@ -43,6 +45,7 @@ void restoreFromDisk()
             {
                 return;
             }
+            printf("size = %s\n", buffer);
             newEntry->size = atoi(buffer);
 
             buffer = calloc(1, 13);
@@ -50,6 +53,7 @@ void restoreFromDisk()
             {
                 return;
             }
+            printf("modTime = %s\n", buffer);
             newEntry->modTime = atoi(buffer);
 
             buffer = calloc(1, 13);
@@ -57,6 +61,7 @@ void restoreFromDisk()
             {
                 return;
             }
+            printf("accessTime = %s\n", buffer);
             newEntry->accessTime = atoi(buffer);
 
             buffer = calloc(1, 2);
@@ -64,6 +69,7 @@ void restoreFromDisk()
             {
                 return;
             }
+            printf("type = %s\n", buffer);
             newEntry->type = atoi(buffer);
 
             free(buffer);
@@ -91,10 +97,8 @@ void restoreFromDisk()
                 inputIndex++;
             }
 
-            printf("newEntry->name = %s\n", newEntry->name);
-            printf("newEntry->type = %d\n", newEntry->type);
             memcpy(&data[j], newEntry, sizeof(entry));
-         
+            printf("__________________ NEW ENTRY _________________\n");
         }
         index++;
     }
