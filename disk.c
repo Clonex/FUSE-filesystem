@@ -2,24 +2,26 @@ char *removePadding(char *value, char padding, bool leftPad);
 
 void restoreFromDisk()
 {
-    
-    // TODO: check if file exists
     printf("restoreFromDisk(): starting..\n");
     char tempBuff[20];
     FILE *fp = fopen("data.img", "r");
 
-    while(1)
+    entry *queue = calloc(1, sizeof(entry));
+    if(queue == NULL)
     {
-        //fseek(fp, -1L, SEEK_CUR);
-        if(feof(fp))
-        {
-            // EOF 
-            printf("HUHUHUH\n");
-            break;
-        }
-        //fseek(fp, -1L, SEEK_CUR);
-        for(int i = 0; i < DEFAULT_DIR_SIZE; i++)
-        {
+        return;
+    }
+    
+    int inputIndex = 1;
+    int queueLength = 1;
+    memcpy(queue, root_fs, sizeof(entry));
+    int index = 0;
+
+    while(index < queueLength){
+        entry folder = queue[index];
+        entry *data = (entry *) folder.data;
+
+        for(int j = 0; j < DEFAULT_DIR_SIZE; j++){
             entry *newEntry = malloc(sizeof(entry));
             if(newEntry == NULL){
                 return;
@@ -28,23 +30,24 @@ void restoreFromDisk()
             char *buffer = calloc(1, (DEFAULT_NAME_SIZE + 1));
             fgets(buffer, (DEFAULT_NAME_SIZE + 1), fp);
             newEntry->name = removePadding(buffer, '/', false);
-            printf("Raw name: '%s'\n", buffer);
 
             buffer = calloc(1, 11);
             fgets(buffer, 11, fp);
-            newEntry->size = atoi(removePadding(buffer, '0', true));
+            newEntry->size = atoi(buffer);
 
             buffer = calloc(1, 13);
             fgets(buffer, 13, fp);
-            newEntry->modTime = atoi(removePadding(buffer, '0', true));
+            newEntry->modTime = atoi(buffer);
 
             buffer = calloc(1, 13);
             fgets(buffer, 13, fp);
-            newEntry->accessTime = atoi(removePadding(buffer, '0', true));
+            newEntry->accessTime = atoi(buffer);
 
             buffer = calloc(1, 2);
             fgets(buffer, 2, fp);
             newEntry->type = atoi(buffer);
+
+            free(buffer);
 
             printf("File name: '%s'\n", newEntry->name);
             printf("File size: '%d'\n", newEntry->size);
@@ -57,12 +60,73 @@ void restoreFromDisk()
                 newEntry->data = calloc(1, newEntry->size + 2);
                 fgets(newEntry->data, newEntry->size + 2, fp);
                 printf("File data: %s\n..", newEntry->data);
+            }else if(newEntry->type == TYPE_DIR)
+            {
+                newEntry->size = sizeof(entry) * DEFAULT_DIR_SIZE;
+                newEntry->data = calloc(DEFAULT_DIR_SIZE, sizeof(entry));
+                if(newEntry->data == NULL)
+                {
+                    return; // ERROR
+                }
+
+                queueLength++;
+                queue = realloc(queue, sizeof(entry) * queueLength);
+                memcpy(&queue[inputIndex], newEntry, sizeof(entry));
+                inputIndex++;
             }
+
+            memcpy(&data[j], newEntry, sizeof(entry));
             printf("---\n");
+         
+        }
+            printf("------------- NEXT QUEUE ITEM --------\n");
+        index++;
+    }
+    free(queue);
+
+    // printf("SAving\n");
+    // FILE *fp = fopen("data.img", "w+");
+    // fprintf(fp, "%s", output); 
+    // fclose(fp);
+
+    // free(output);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // TODO: check if file exists
+    
+
+    while(0)
+    {
+        //fseek(fp, -1L, SEEK_CUR);
+        if(feof(fp))
+        {
+            // EOF 
+            printf("HUHUHUH\n");
+            break;
+        }
+        //fseek(fp, -1L, SEEK_CUR);
+        for(int i = 0; i < DEFAULT_DIR_SIZE; i++)
+        {
+            
             
         }
         printf("------------ NEW FOLDER -------------\n");
-        fgets(tempBuff, 0, fp);
+        //fgets(tempBuff, 0, fp);
      }
     fclose(fp);
 }
@@ -77,30 +141,32 @@ char *removePadding(char *value, char padding, bool leftPad)
     if(leftPad)
     {
        int i;
-        for(i = strlen(value); i >= 0; i--)
+        for(i = 0; i < strlen(value); i++)
         {
-            if(value[i] == padding)
+            if(value[i] != padding)
             {
                 break;
             }
         }
         int length = strlen(value) - i;
         char *newBlock = calloc(1, length);
-        memcpy(newBlock, value + i + 1, length);
+        memcpy(newBlock, value + i, length);
         //strcat(newBlock, value + i);
         return newBlock;
     }
      int i;
-    for(i = 0; i < strlen(value); i++)
+    for(i = strlen(value) - 1; i > 0; i--)
     {
-        if(value[i] == padding)
+        if(value[i] != padding)
         {
             break;
         }
     }
-    
     char *newBlock = calloc(1, i + 1);
-    memcpy(newBlock, value, i);
+    if(i != 0)
+    {
+        memcpy(newBlock, value, i + 1);
+    }
     return newBlock;
     
 }

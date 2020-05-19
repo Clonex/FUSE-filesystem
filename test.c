@@ -51,7 +51,7 @@ int main()
 	{
 		return -1; // TODO error
 	}
-	root_fs->name = "hejsa";
+	root_fs->name = "";
 	root_fs->type = TYPE_DIR;
 	root_fs->access = ACCESS_READ_WRITE;
 
@@ -69,12 +69,18 @@ int main()
         data[i].size = 0;
     }
     
+    // char *test = "////////////////////////////////";
+    // char* out = removePadding(test, '/', true);
+    // printf("%s\n%s\n", test, out);
+
+    // test = "////////////////////////////////hemmelig";
+    // out = removePadding(test, '/', true);
+    // printf("%s\n%s\n", test, out);
     restoreFromDisk();
 
-	printf("File data: %s\n", (char *) NULL);
-    //saveToDisk(root_fs);
-
-    free(root_fs->data);
+    // createEntry("/fil", TYPE_DIR);
+    // saveToDisk(root_fs);
+    recursiveRemoveDir(root_fs);
     free(root_fs);
     /*int fsSize = totalSize(root_fs);
     FILE *fp = fopen("other.img", "w+");
