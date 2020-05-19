@@ -167,17 +167,19 @@ char *createBlock(entry file)
     char *modTime = malloc(12 + 1);
     char *accessTime = malloc(12 + 1);
 
-    sprintf(type, "%d", file.type);
-    sprintf(size, "%d", file.size);
-    sprintf(modTime, "%ld", file.modTime);
-    sprintf(accessTime, "%ld", file.accessTime);
-    
-    int headerSize = (DEFAULT_NAME_SIZE + 1) + 2 + 11 + 13 + 13;
     int tempSize = 0;
     if(file.data)
     {
         tempSize = strlen(file.data) + 1;
     }
+
+    sprintf(type, "%d", file.type);
+    sprintf(size, "%d", tempSize);
+    sprintf(modTime, "%ld", file.modTime);
+    sprintf(accessTime, "%ld", file.accessTime);
+    
+    int headerSize = (DEFAULT_NAME_SIZE + 1) + 2 + 11 + 13 + 13;
+    
     char *out = calloc(1, (headerSize + tempSize));
     if(out == NULL)
     {
@@ -189,7 +191,7 @@ char *createBlock(entry file)
     strcat(out, tempPad);
     free(tempPad);
 
-    tempPad = pad(tempSize, 10, '0', true);
+    tempPad = pad(size, 10, '0', true);
     strcat(out, tempPad);
     free(tempPad);
 
