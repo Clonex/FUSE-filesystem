@@ -67,6 +67,11 @@ void restoreFromDisk()
     fclose(fp);
 }
 
+/*
+0020
+
+*/
+
 char *removePadding(char *value, char padding, bool leftPad)
 {
     if(leftPad)
@@ -168,8 +173,12 @@ char *createBlock(entry file)
     sprintf(accessTime, "%ld", file.accessTime);
     
     int headerSize = (DEFAULT_NAME_SIZE + 1) + 2 + 11 + 13 + 13;
-    
-    char *out = calloc(1, (headerSize + file.size));
+    int tempSize = 0;
+    if(file.data)
+    {
+        tempSize = strlen(file.data) + 1;
+    }
+    char *out = calloc(1, (headerSize + tempSize));
     if(out == NULL)
     {
         printf("Error\n");

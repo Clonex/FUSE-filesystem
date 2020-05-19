@@ -39,11 +39,15 @@ static struct fuse_operations lfs_oper = {
 };
 
 int lfs_makefile(const char *path, mode_t mode, dev_t device){
-	return createEntry(path, TYPE_FILE);
+	int ret = createEntry(path, TYPE_FILE);
+	saveToDisk(root_fs);
+	return ret;
 }
 
 int lfs_makedir(const char *path, mode_t mode){
-	return createEntry(path, TYPE_DIR);
+	int ret = createEntry(path, TYPE_DIR);
+	saveToDisk(root_fs);
+	return ret;
 }
 
 int lfs_getattr( const char *path, struct stat *stbuf ) {
@@ -64,6 +68,7 @@ int lsfs_rmdir(const char *path){
 		file->type = TYPE_BLANK;
 		file->name = "";
 	}
+	saveToDisk(root_fs);
 	return 0;
 }
 
@@ -76,6 +81,7 @@ int lsfs_unlink(const char *path){
 		file->type = TYPE_BLANK;
 		file->name = "";
 	}
+	saveToDisk(root_fs);
 	return 0;
 }
 
@@ -127,7 +133,7 @@ int lfs_write( const char *path, const char *buf, size_t size, off_t offset, str
 
 	if((size + offset) > target->size)
 	{
-		char *mem = malloc(size + offset);
+		char *mem = calloc(1, size + offset);
 		if(mem == NULL)
 		{
 			return 0;

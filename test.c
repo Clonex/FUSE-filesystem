@@ -71,6 +71,7 @@ int main()
     
     restoreFromDisk();
 
+    printf("test %d\n", strlen(NULL));
     //saveToDisk(root_fs);
 
     free(root_fs->data);
