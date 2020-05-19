@@ -71,8 +71,8 @@ void restoreFromDisk()
             if(newEntry->type == TYPE_FILE)
             {
                 printf("file name = %s, file size = %d\n", newEntry->name, newEntry->size);
-                newEntry->data = calloc(1, newEntry->size + 2);
-                if(fgets(newEntry->data, newEntry->size + 2, fp) == NULL){
+                newEntry->data = calloc(1, newEntry->size);
+                if(fgets(newEntry->data, newEntry->size, fp) == NULL){
                     return;
                 }
                 printf("File data: '%s'\n", newEntry->data);
@@ -206,7 +206,7 @@ char *createBlock(entry file)
     int tempSize = 0;
     if(file.data)
     {
-        tempSize = strlen(file.data) + 1;
+        tempSize = file.size;
     }
 
     // Converts the values into strings.
