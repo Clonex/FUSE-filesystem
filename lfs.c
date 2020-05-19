@@ -14,6 +14,7 @@ int lfs_write( const char *path, const char *buf, size_t size, off_t offset, str
 int lfs_truncate(const char *path, off_t offset);
 int lfs_unlink(const char *path);
 int lfs_rmdir(const char *path);
+static inline int lfs_utime(const char *path, struct utimbuf *buf);
 
 static struct fuse_operations lfs_oper = {
 	.getattr	= lfs_getattr,		// Get a attribute
