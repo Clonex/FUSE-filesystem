@@ -18,16 +18,16 @@ static inline int lfs_utime(const char *path, struct utimbuf *buf);
 
 static struct fuse_operations lfs_oper = {
 	.getattr	= lfs_getattr,		// Get a attribute
-	.readdir	= lfs_readdir,		//	
+	.readdir	= lfs_readdir,		// Get contents of a foler
 	.mknod 		= lfs_makefile,		// Make a file
 	.mkdir 		= lfs_makedir,		// Make a directory
-	.unlink 	= lfs_unlink,				// Remove file
-	.rmdir 		= lfs_rmdir,				// Rename folder
-	.truncate 	= lfs_truncate,				// Empty a file
-	.open		= lfs_open,			// Opens a 
-	.read		= lfs_read,			// Reads a 
-	.release 	= lfs_release,		// Closes a 
-	.write 		= lfs_write,			
+	.unlink 	= lfs_unlink,		// Remove file
+	.rmdir 		= lfs_rmdir,		// Rename folder
+	.truncate 	= lfs_truncate,		// Empty a file
+	.open		= lfs_open,			// Opens a file
+	.read		= lfs_read,			// Reads a file
+	.release 	= lfs_release,		// Closes a file
+	.write 		= lfs_write,		// Writes to a file
 	.rename 	= NULL,				
 	.utime 		= lfs_utime
 };
@@ -53,6 +53,8 @@ int lfs_truncate(const char *path, off_t offset) {
 	
 	char **nameArr = splitString(path, '/', true);
 	entry *file = findEntry(nameArr);
+	
+	free(file->data);
 	
 	file->data = calloc(1, 1);
 	if(file->data == NULL){
@@ -153,9 +155,9 @@ int lfs_write( const char *path, const char *buf, size_t size, off_t offset, str
 		target->data = mem;
 		target->size = offset + tempSize;
 
-		if(offset != 0){ // appending, terminating zero not added
-			target->size--;
-		}
+		// if(offset != 0){ // appending, terminating zero not added
+		// 	target->size--;
+		// }
 	}
 	printf("Data middle = %s\n", target->data);
 	printf("Size middle  = %d\n", target->size);
