@@ -33,23 +33,23 @@ void restoreFromDisk()
             }
             
             char *buffer = calloc(1, (DEFAULT_NAME_SIZE + 1));
-            fgets(buffer, (DEFAULT_NAME_SIZE + 1), fp);
+            (void)fgets(buffer, (DEFAULT_NAME_SIZE + 1), fp);
             newEntry->name = removePadding(buffer, '/', false);
 
             buffer = calloc(1, 11);
-            fgets(buffer, 11, fp);
+            (void)fgets(buffer, 11, fp);
             newEntry->size = atoi(buffer);
 
             buffer = calloc(1, 13);
-            fgets(buffer, 13, fp);
+            (void)fgets(buffer, 13, fp);
             newEntry->modTime = atoi(buffer);
 
             buffer = calloc(1, 13);
-            fgets(buffer, 13, fp);
+            (void)fgets(buffer, 13, fp);
             newEntry->accessTime = atoi(buffer);
 
             buffer = calloc(1, 2);
-            fgets(buffer, 2, fp);
+            (void)fgets(buffer, 2, fp);
             newEntry->type = atoi(buffer);
 
             free(buffer);
