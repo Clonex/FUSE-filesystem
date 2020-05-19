@@ -53,8 +53,8 @@ void restoreFromDisk()
             
             if(newEntry->type == TYPE_FILE)
             {
-                newEntry->data = calloc(1, newEntry->size + 2);
-                fgets(newEntry->data, newEntry->size + 2, fp);
+                newEntry->data = calloc(1, newEntry->size + 1);
+                fgets(newEntry->data, newEntry->size + 1, fp);
             }else if(newEntry->type == TYPE_DIR)
             {
                 newEntry->size = sizeof(entry) * DEFAULT_DIR_SIZE;
@@ -123,7 +123,7 @@ void saveToDisk(entry *file)
 {
     int folders = countFolders(file);
     int length = folders * sizeof(entry);
-    entry *queue = malloc(length);
+    entry *queue = malloc(length); // Contains the next
     if(queue == NULL)
     {
         return;
@@ -188,6 +188,7 @@ char *createBlock(entry file)
         tempSize = strlen(file.data) + 1;
     }
 
+    // Converts the values into strings.
     sprintf(type, "%d", file.type);
     sprintf(size, "%d", tempSize);
     sprintf(modTime, "%ld", file.modTime);
@@ -201,6 +202,7 @@ char *createBlock(entry file)
         return NULL;
     }
 
+    // Pads the strings, and adds them to the output string.
     char *tempPad = pad(file.name, DEFAULT_NAME_SIZE, '/', false);
     strcat(out, tempPad);
     free(tempPad);
