@@ -48,8 +48,21 @@ int lfs_getattr( const char *path, struct stat *stbuf ) {
 	return getAttributes(path, stbuf);
 }
 
-int lfs_truncate(const char *path, off_t offset) {
-	printf("Truncating!\n");	
+int lfs_truncate(const char *path, off_t offset, struct fuse_file_info *fi) {
+	printf("Truncating!\n");
+	entry *file;
+	if(fi->fh == NULL){
+		file = fi->fh;
+	}
+	else{
+		char **nameArr = splitString(path, '/', true);
+		file = findEntry(nameArr);
+	}
+	file->data = calloc(1, 1);
+	if(file->data == NULL){
+		return -ENOMEM;
+	}
+
 	return 0;
 }
 
