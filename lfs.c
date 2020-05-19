@@ -155,9 +155,9 @@ int lfs_write( const char *path, const char *buf, size_t size, off_t offset, str
 		target->data = mem;
 		target->size = offset + tempSize;
 
-		if(offset != 0){ // appending, terminating zero not added
-			target->size--;
-		}
+		// if(offset != 0){ // appending, terminating zero not added
+		// 	target->size--;
+		// }
 	}
 	strcat(target->data, buf);
 	time_t stamp;
