@@ -50,14 +50,10 @@ int lfs_getattr( const char *path, struct stat *stbuf ) {
 
 int lfs_truncate(const char *path, off_t offset) {
 	printf("Truncating!\n");
-	entry *file;
-	if((entry *)fi->fh == NULL){
-		file = (entry *)fi->fh;
-	}
-	else{
-		char **nameArr = splitString(path, '/', true);
-		file = findEntry(nameArr);
-	}
+	
+	char **nameArr = splitString(path, '/', true);
+	entry *file = findEntry(nameArr);
+	
 	file->data = calloc(1, 1);
 	if(file->data == NULL){
 		return -ENOMEM;
