@@ -33,23 +33,38 @@ void restoreFromDisk()
             }
             
             char *buffer = calloc(1, (DEFAULT_NAME_SIZE + 1));
-            ignore_result(fgets(buffer, (DEFAULT_NAME_SIZE + 1), fp));
+            if(fgets(buffer, (DEFAULT_NAME_SIZE + 1), fp) == NULL)
+            {
+                return;
+            }
             newEntry->name = removePadding(buffer, '/', false);
 
             buffer = calloc(1, 11);
-            ignore_result(fgets(buffer, 11, fp));
+            if(fgets(buffer, 11, fp) == NULL)
+            {
+                return;
+            }
             newEntry->size = atoi(buffer);
 
             buffer = calloc(1, 13);
-            ignore_result(fgets(buffer, 13, fp));
+            if(fgets(buffer, 13, fp) == NULL)
+            {
+                return;
+            }
             newEntry->modTime = atoi(buffer);
 
             buffer = calloc(1, 13);
-            ignore_result(fgets(buffer, 13, fp));
+            if(fgets(buffer, 13, fp) == NULL)
+            {
+                return;
+            }
             newEntry->accessTime = atoi(buffer);
 
             buffer = calloc(1, 2);
-            ignore_result(fgets(buffer, 2, fp));
+            if(fgets(buffer, 2, fp) == NULL)
+            {
+                return;
+            }
             newEntry->type = atoi(buffer);
 
             free(buffer);
@@ -57,7 +72,9 @@ void restoreFromDisk()
             if(newEntry->type == TYPE_FILE)
             {
                 newEntry->data = calloc(1, newEntry->size + 2);
-                fgets(newEntry->data, newEntry->size + 2, fp);
+                if(fgets(newEntry->data, newEntry->size + 2, fp) == NULL){
+                    return;
+                }
                 printf("File data: '%s'\n", newEntry->data);
             }else if(newEntry->type == TYPE_DIR)
             {
