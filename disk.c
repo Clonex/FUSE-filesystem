@@ -5,8 +5,11 @@
 void restoreFromDisk()
 {
     printf("restoreFromDisk(): starting..\n");
-    char tempBuff[20];
     FILE *fp = fopen("data.img", "r");
+    if(!fp)
+    {
+        return;
+    }
 
     entry *queue = calloc(1, sizeof(entry));
     if(queue == NULL)
