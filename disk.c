@@ -25,8 +25,8 @@ void restoreFromDisk()
         entry folder = queue[index];
         entry *data = (entry *) folder.data;
 
-        for(int j = 0; j < DEFAULT_DIR_SIZE; j++){
-            printf("j: %d\n", j);
+        for(int j = 0; j < DEFAULT_DIR_SIZE; j++)
+        {
             entry *newEntry = malloc(sizeof(entry));
             if(newEntry == NULL){
                 return;
@@ -37,7 +37,6 @@ void restoreFromDisk()
             {
                 return;
             }
-            printf("name = %s\n", buffer);
             newEntry->name = removePadding(buffer, '/', false);
 
             buffer = calloc(1, 11);
@@ -45,7 +44,6 @@ void restoreFromDisk()
             {
                 return;
             }
-            printf("size = %s\n", buffer);
             newEntry->size = atoi(buffer);
 
             buffer = calloc(1, 13);
@@ -53,7 +51,6 @@ void restoreFromDisk()
             {
                 return;
             }
-            printf("modTime = %s\n", buffer);
             newEntry->modTime = atoi(buffer);
 
             buffer = calloc(1, 13);
@@ -61,7 +58,6 @@ void restoreFromDisk()
             {
                 return;
             }
-            printf("accessTime = %s\n", buffer);
             newEntry->accessTime = atoi(buffer);
 
             buffer = calloc(1, 2);
@@ -69,19 +65,17 @@ void restoreFromDisk()
             {
                 return;
             }
-            printf("type = %s\n", buffer);
             newEntry->type = atoi(buffer);
 
             free(buffer);
 
             if(newEntry->type == TYPE_FILE)
             {
-                newEntry->data = calloc(1, newEntry->size + 1);
+                newEntry->data = calloc(1, newEntry->size + 1); // +1 in case the size is 0
                 if(fread(newEntry->data, 1, newEntry->size, fp) == NULL) // fread reads past newline, which our data might include
                 { 
                     return;
                 }
-                printf("File data: '%s'\n", newEntry->data);
             }else if(newEntry->type == TYPE_DIR)
             {
                 newEntry->size = sizeof(entry) * DEFAULT_DIR_SIZE;
@@ -98,7 +92,6 @@ void restoreFromDisk()
             }
 
             memcpy(&data[j], newEntry, sizeof(entry));
-            printf("__________________ NEW ENTRY _________________\n");
         }
         index++;
     }
