@@ -3,12 +3,6 @@
 #include "disk.c" 
 #include "implementation.c" 
 
-static inline int lsfs_utime_STUB(const char *path, struct utimbuf *buf) {
-    (void)path;
-    (void)buf;
-    return 0;
-}
-
 int lfs_getattr( const char *, struct stat * );
 int lfs_readdir( const char *, void *, fuse_fill_dir_t, off_t, struct fuse_file_info * );
 int lfs_open( const char *, struct fuse_file_info * );
@@ -17,25 +11,24 @@ int lfs_release(const char *path, struct fuse_file_info *fi);
 int lfs_makefile(const char *path, mode_t mode, dev_t device);
 int lfs_makedir(const char *path, mode_t mode);
 int lfs_write( const char *path, const char *buf, size_t size, off_t offset, struct fuse_file_info *fi );
-int lsfs_truncate(const char *path, off_t offset);
-int lsfs_unlink(const char *path);
-int lsfs_rmdir(const char *path);
-
+int lfs_truncate(const char *path, off_t offset);
+int lfs_unlink(const char *path);
+int lfs_rmdir(const char *path);
 
 static struct fuse_operations lfs_oper = {
 	.getattr	= lfs_getattr,		// Get a attribute
 	.readdir	= lfs_readdir,		//	
 	.mknod 		= lfs_makefile,		// Make a file
 	.mkdir 		= lfs_makedir,		// Make a directory
-	.unlink 	= lsfs_unlink,				// Remove file
-	.rmdir 		= lsfs_rmdir,				// Rename folder
-	.truncate 	= lsfs_truncate,				// Empty a file
+	.unlink 	= lfs_unlink,				// Remove file
+	.rmdir 		= lfs_rmdir,				// Rename folder
+	.truncate 	= lfs_truncate,				// Empty a file
 	.open		= lfs_open,			// Opens a 
 	.read		= lfs_read,			// Reads a 
 	.release 	= lfs_release,		// Closes a 
 	.write 		= lfs_write,			
 	.rename 	= NULL,				
-	.utime 		= lsfs_utime_STUB
+	.utime 		= lfs_utime
 };
 
 int lfs_makefile(const char *path, mode_t mode, dev_t device){
@@ -54,11 +47,15 @@ int lfs_getattr( const char *path, struct stat *stbuf ) {
 	return getAttributes(path, stbuf);
 }
 
-int lsfs_truncate(const char *path, off_t offset) {
+int lfs_truncate(const char *path, off_t offset) {
 	return 0;
 }
 
-int lsfs_rmdir(const char *path){
+static inline int lfs_utime(const char *path, struct utimbuf *buf) {
+    return 0;
+}
+
+int lfs_rmdir(const char *path){
 	char **arr = splitString(path, '/', true);
 	entry *file = findEntry(arr);
 	if(file != NULL)
@@ -72,7 +69,7 @@ int lsfs_rmdir(const char *path){
 	return 0;
 }
 
-int lsfs_unlink(const char *path){
+int lfs_unlink(const char *path){
 	char **arr = splitString(path, '/', true);
 	entry *file = findEntry(arr);
 	if(file != NULL)
@@ -115,7 +112,7 @@ int lfs_open( const char *path, struct fuse_file_info *fi ) {
 	char **tempPath = splitString(path, '/', true);
 	if(tempPath == NULL)
 	{
-		return -1; // TODO
+		return -ENOMEM; // TODO
 	}
 	entry *file = findEntry(tempPath);
 
@@ -130,7 +127,6 @@ int lfs_open( const char *path, struct fuse_file_info *fi ) {
 int lfs_write( const char *path, const char *buf, size_t size, off_t offset, struct fuse_file_info *fi ) {
     printf("write(): path=%s, size=%ld, sizeof=%ld, strlen=%ld, offset=%ld\n", path, size, sizeof(buf), strlen(buf), offset);
 	entry *target = (entry *) fi->fh;
-	printf("File data: %s\n", (char *) target->data);
 	int tempSize = strlen(buf) + 1;
 	if((tempSize + offset) > target->size)
 	{
@@ -144,16 +140,12 @@ int lfs_write( const char *path, const char *buf, size_t size, off_t offset, str
 		target->data = mem;
 		target->size = offset + tempSize;
 	}
-	printf("File data: %s\n", (char *) target->data);
 	strcat(target->data, buf);
-	//memcpy(target->data + offset, buf, tempSize);
 	time_t stamp;
     time(&stamp);
     target->modTime = stamp;
-	printf("File data: %s\n", (char *) target->data);
 	
 	saveToDisk(root_fs);
-	printf("File data: %s\n", (char *) target->data);
 	return size;
 }
 
@@ -189,17 +181,16 @@ int main( int argc, char *argv[] ) {
 	root_fs = malloc(sizeof(struct entry));
 	if(root_fs == NULL)
 	{
-		return -1; // TODO error
+		return -ENOMEM;
 	}
 	root_fs->type = TYPE_DIR;
-	root_fs->access = ACCESS_READ_WRITE;
 	root_fs->name = "";
 
     root_fs->size = sizeof(entry) * DEFAULT_DIR_SIZE;
     root_fs->data = calloc(DEFAULT_DIR_SIZE, sizeof(entry));
     if(root_fs->data == NULL)
     {
-        return -1; // TODO: error
+        return -ENOMEM;
     }
     entry *data = (entry *) root_fs->data;
     for(int i = 0; i < DEFAULT_DIR_SIZE; i++)

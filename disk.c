@@ -1,5 +1,8 @@
 char *removePadding(char *value, char padding, bool leftPad);
 
+/*
+ *
+ */
 void restoreFromDisk()
 {
     printf("restoreFromDisk(): starting..\n");
@@ -48,12 +51,6 @@ void restoreFromDisk()
             newEntry->type = atoi(buffer);
 
             free(buffer);
-
-            printf("File name: '%s'\n", newEntry->name);
-            printf("File size: '%d'\n", newEntry->size);
-            printf("File modTime: '%ld'\n", newEntry->modTime);
-            printf("File accessTime: '%ld'\n", newEntry->accessTime);
-            printf("File type: '%d'\n", newEntry->type);
             
             if(newEntry->type == TYPE_FILE)
             {
@@ -76,66 +73,17 @@ void restoreFromDisk()
             }
 
             memcpy(&data[j], newEntry, sizeof(entry));
-            printf("---\n");
          
         }
-            printf("------------- NEXT QUEUE ITEM --------\n");
         index++;
     }
     free(queue);
-
-    // printf("SAving\n");
-    // FILE *fp = fopen("data.img", "w+");
-    // fprintf(fp, "%s", output); 
-    // fclose(fp);
-
-    // free(output);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // TODO: check if file exists
-    
-
-    while(0)
-    {
-        //fseek(fp, -1L, SEEK_CUR);
-        if(feof(fp))
-        {
-            // EOF 
-            printf("HUHUHUH\n");
-            break;
-        }
-        //fseek(fp, -1L, SEEK_CUR);
-        for(int i = 0; i < DEFAULT_DIR_SIZE; i++)
-        {
-            
-            
-        }
-        printf("------------ NEW FOLDER -------------\n");
-        //fgets(tempBuff, 0, fp);
-     }
     fclose(fp);
 }
 
 /*
-0020
-
-*/
-
+ *
+ */
 char *removePadding(char *value, char padding, bool leftPad)
 {
     if(leftPad)
@@ -151,7 +99,6 @@ char *removePadding(char *value, char padding, bool leftPad)
         int length = strlen(value) - i;
         char *newBlock = calloc(1, length);
         memcpy(newBlock, value + i, length);
-        //strcat(newBlock, value + i);
         return newBlock;
     }
      int i;
@@ -171,6 +118,9 @@ char *removePadding(char *value, char padding, bool leftPad)
     
 }
 
+/*
+ *
+ */
 void saveToDisk(entry *file)
 {
     int folders = countFolders(file);
@@ -215,10 +165,8 @@ void saveToDisk(entry *file)
             free(block);
         }
     }
-    printf("\nContents: %s\n", output);
     free(queue);
 
-    printf("SAving\n");
     FILE *fp = fopen("data.img", "w+");
     fprintf(fp, "%s", output); 
     fclose(fp);
@@ -226,6 +174,9 @@ void saveToDisk(entry *file)
     free(output);
 }
 
+/*
+ *
+ */
 char *createBlock(entry file)
 {
     char *type = malloc(2);
@@ -249,7 +200,6 @@ char *createBlock(entry file)
     char *out = calloc(1, (headerSize + tempSize));
     if(out == NULL)
     {
-        printf("Error\n");
         return NULL;
     }
 
@@ -273,7 +223,6 @@ char *createBlock(entry file)
 
     if(file.data != NULL && file.type == TYPE_FILE)
     {
-        printf("DATA: %s\n", (char *)file.data);
         strcat(out, (char *)file.data); 
     }
 
@@ -285,6 +234,9 @@ char *createBlock(entry file)
     return out;    
 }
 
+/*
+ *
+ */
 char *pad(char *value, int length, char padding, bool leftPad)
 {
     int diff = (length - strlen(value));
@@ -317,6 +269,9 @@ char *pad(char *value, int length, char padding, bool leftPad)
     return new;
 }
 
+/*
+ *
+ */
 int countFolders(entry *file)
 {
     int ret = 1;

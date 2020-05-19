@@ -12,11 +12,6 @@
 #define DEFAULT_DIR_SIZE 10			// amount
 #define DEFAULT_NAME_SIZE 32 		// length
 
-#define ACCESS_READ 'r'
-#define ACCESS_WRITE 'w'
-#define ACCESS_READ_WRITE 'a'
-#define ACCESS_EXEC 'e'
-
 typedef struct entry {
 	int type;
 	void* data;
@@ -24,7 +19,6 @@ typedef struct entry {
 	int size;
 	time_t modTime;
 	time_t accessTime;
-	char access; // read, write, read/write, execute permissions
 	char *name;
 } entry;
 

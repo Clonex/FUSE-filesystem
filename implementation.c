@@ -4,8 +4,6 @@
  * 
  */
 int getAttributes(const char *path, struct stat *stbuf){
-    printf("getattr(): (path=%s)\n", path);
-
 	memset(stbuf, 0, sizeof(struct stat));
 	if( strcmp( path, "/" ) == 0 ) {
 		stbuf->st_mode = S_IFDIR | 0755;
@@ -14,18 +12,13 @@ int getAttributes(const char *path, struct stat *stbuf){
 		char **tempPath = splitString(path, '/', true);
 		if(tempPath == NULL)
 		{
-			return -1; // TODO
+			return -ENOMEM; // TODO
 		}
 		int length = getLength(tempPath);
 		char *fileName = tempPath[length - 1];
-		printf("getattr(): tempPath.length = %d\n", length);
-		printArr(tempPath);
-		
-		printf("getattr(): Searching for file: %s\n", fileName);
 		entry *file = findEntry(tempPath);
 		if(file != NULL)
 		{
-			printf("getattr(): Found attr-entry, name: %s\n", file->name);
 			if(file->type == TYPE_DIR)
 			{
 				stbuf->st_mode = S_IFDIR | 0755;
@@ -67,18 +60,18 @@ void recursiveRemoveDir(entry* dir)
  */
 int createEntry(const char *path, int type)
 {
-    printf("createEntry(): Creating file..\n");
     entry *file = calloc(1, sizeof(entry));
     if(file == NULL){
-        return -1; // TODO error
+        return -ENOMEM;
     }
+    
     if(type == TYPE_DIR)
     {
         file->size = sizeof(entry) * DEFAULT_DIR_SIZE;
         file->data = calloc(DEFAULT_DIR_SIZE, sizeof(entry));
         if(file->data == NULL)
         {
-            return -1; // TODO: error
+            return -ENOMEM;
         }
         entry *data = (entry *) file->data;
         for(int i = 0; i < DEFAULT_DIR_SIZE; i++)
@@ -90,6 +83,7 @@ int createEntry(const char *path, int type)
         file->size = 0;
         file->data = NULL;
     }
+
     time_t stamp;
     time(&stamp);
     file->accessTime = stamp;
@@ -100,19 +94,16 @@ int createEntry(const char *path, int type)
     char **pathArr = splitString(path, '/', false);
     if(pathArr == NULL || nameArr == NULL)
     {
-        return -1; // TODO: error
+        return -ENOMEM;
     }
-    //cutName(nameArr[getLength(nameArr) - 1], file->name);
+
     file->name = nameArr[getLength(nameArr) - 1];
     if(strlen(file->name) > DEFAULT_NAME_SIZE)
     {
-        return -36; // 
+        return -ENAMETOOLONG; 
     }
-    file->access = ACCESS_READ_WRITE;
 
     entry *targetDir = root_fs;
-    printArr(pathArr);
-    printf("length %d\n", getLength(pathArr));
     if(getLength(pathArr) != 1)
     {
         targetDir = findEntry(pathArr);
@@ -123,11 +114,10 @@ int createEntry(const char *path, int type)
         if(data[i].type == TYPE_BLANK)
         {
             data[i] = *file;
-            printf("createEntry(): Entry added..\n");
             return 0;
         }
     }
-    return -1; // TODO: err
+    return -ENFILE;
 }
 
 /*
@@ -149,21 +139,15 @@ void cutName(char* source, char *target)
  */
 entry* findEntry(char **pathArr){
     size_t length = getLength(pathArr);
-    printf("findEntry(): Checking dir..\n");
     entry *currentEntry = root_fs;
-    for(int pathI = 0; pathI < length; pathI++){ // Måske (length - 1)
-        printf("findEntry(): Current dir: %s\n", currentEntry->name);
-        printf("findEntry(): Current path: %s\n", pathArr[pathI]);
-
+    for(int pathI = 0; pathI < length; pathI++){
         for(int fileI = 0; fileI < DEFAULT_DIR_SIZE; fileI++){
             entry *file = (entry *) currentEntry->data;
             if(file[fileI].type != TYPE_BLANK && strcmp(file[fileI].name, pathArr[pathI]) == 0){
                 currentEntry = &file[fileI];
-                printf("findEntry(): New folder: %s\n", currentEntry->name);
                 break; // Next path
             }
         }
-        printf("\n");
     }
     
     if(strcmp(currentEntry->name, pathArr[length - 1]) == 0)
