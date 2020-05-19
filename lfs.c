@@ -11,7 +11,7 @@ int lfs_release(const char *path, struct fuse_file_info *fi);
 int lfs_makefile(const char *path, mode_t mode, dev_t device);
 int lfs_makedir(const char *path, mode_t mode);
 int lfs_write( const char *path, const char *buf, size_t size, off_t offset, struct fuse_file_info *fi );
-int lfs_truncate(const char *path, off_t offset);
+int lfs_truncate(const char *path, off_t offset, struct fuse_file_info *fi);
 int lfs_unlink(const char *path);
 int lfs_rmdir(const char *path);
 static inline int lfs_utime(const char *path, struct utimbuf *buf);
@@ -51,8 +51,8 @@ int lfs_getattr( const char *path, struct stat *stbuf ) {
 int lfs_truncate(const char *path, off_t offset, struct fuse_file_info *fi) {
 	printf("Truncating!\n");
 	entry *file;
-	if(fi->fh == NULL){
-		file = fi->fh;
+	if((entry *)fi->fh == NULL){
+		file = (entry *)fi->fh;
 	}
 	else{
 		char **nameArr = splitString(path, '/', true);
