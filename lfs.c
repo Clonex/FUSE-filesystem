@@ -18,11 +18,11 @@ static inline int lfs_utime(const char *path, struct utimbuf *buf);
 
 static struct fuse_operations lfs_oper = {
 	.getattr	= lfs_getattr,		// Get a attribute
-	.readdir	= lfs_readdir,		// Get contents of a foler
+	.readdir	= lfs_readdir,		// Get contents of a folder
 	.mknod 		= lfs_makefile,		// Make a file
 	.mkdir 		= lfs_makedir,		// Make a directory
 	.unlink 	= lfs_unlink,		// Remove file
-	.rmdir 		= lfs_rmdir,		// Rename folder
+	.rmdir 		= lfs_rmdir,		// Remove folder
 	.truncate 	= lfs_truncate,		// Empty a file
 	.open		= lfs_open,			// Opens a file
 	.read		= lfs_read,			// Reads a file
