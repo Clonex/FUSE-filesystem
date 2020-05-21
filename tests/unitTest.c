@@ -1,6 +1,18 @@
-#include "src/lfs.h" 
-#include "src/implementation.c" 
-#include "src/disk.c" 
+#define S_IFDIR 0
+#define S_IFREG 0
+struct stat {
+    int st_mode;
+    int st_nlink;
+    int st_size;
+    int st_atime;
+    int st_mtime;
+};
+
+#include "../lfs.h" 
+#include "../implementation.c" 
+#include "../disk.c" 
+
+
 
 char successMsg[] = "\033[0;32mPASSED\033[0m";
 char failedMsg[] = "\033[0;31mFAILED\033[0m";
@@ -58,6 +70,7 @@ void createEntryTest()
     bool passed = strcmp(file.name, "weirdName") == 0;
     printf("[createEntry]\t%s\n", passed ? successMsg : failedMsg);
 }
+
 void findEntryTest()
 {
     entry *file = findEntry(splitString("/weirdName", '/', true));
