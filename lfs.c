@@ -86,6 +86,7 @@ int lfs_unlink(const char *path){
 	if(file != NULL)
 	{
 		free(file->data);
+		file->data = NULL;
 		file->type = TYPE_BLANK;
 		file->name = "";
 	}
