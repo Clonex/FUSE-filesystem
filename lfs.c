@@ -215,5 +215,9 @@ int main( int argc, char *argv[] ) {
 	restoreFromDisk();
 
 	fuse_main( argc, argv, &lfs_oper );
+	
+	// free the root
+	recursiveRemoveDir(root_fs);
+	free(root_fs);
 	return 0;
 }
