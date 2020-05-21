@@ -56,10 +56,7 @@ int lfs_truncate(const char *path, off_t offset) {
 	
 	free(file->data);
 	
-	file->data = calloc(1, 1);
-	if(file->data == NULL){
-		return -ENOMEM;
-	}
+	file->data = NULL;
 	file->size = 0;
 
 	return 0;
