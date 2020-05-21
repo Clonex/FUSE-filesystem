@@ -135,11 +135,15 @@ int lfs_open( const char *path, struct fuse_file_info *fi ) {
 int lfs_write( const char *path, const char *buf, size_t size, off_t offset, struct fuse_file_info *fi ) {
     printf("write(): path=%s, size=%ld, strlen=%ld, offset=%ld\n", path, size, strlen(buf), offset);
 	entry *target = (entry *) fi->fh;
-	int tempSize = size;
 
-	if((tempSize + offset) > target->size) // requested write exceeds the already allocated size of the file, new memory must be allocated
+	if(target->data == NULL) // write to an empty file
 	{
-		char *mem = calloc(1, tempSize + offset);
+		target->data = calloc(1, size);
+		target->size = size;
+	}
+	else if((size + offset) > target->size) // requested write exceeds the already allocated size of the file, new memory must be allocated
+	{
+		char *mem = calloc(1, size + offset);
 		if(mem == NULL)
 		{
 			return 0;
@@ -147,7 +151,7 @@ int lfs_write( const char *path, const char *buf, size_t size, off_t offset, str
 		memcpy(mem, target->data, offset); // existing data before the offset is kept intact
 		free(target->data);
 		target->data = mem;
-		target->size = offset + tempSize;
+		target->size = offset + size;
 	}
 	strcat(target->data, buf); // new data is concatenated to the buffer
 	time_t stamp;
