@@ -3,3 +3,4 @@ lfs
 test
 root/*
 adata.img
+*.exe
