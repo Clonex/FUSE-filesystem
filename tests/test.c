@@ -1,6 +1,6 @@
-#include "lfs.h" 
-#include "implementation.c" 
-#include "disk.c" 
+#include "../lfs.h" 
+#include "../implementation.c" 
+#include "../disk.c" 
 
 void printArr(char **arr)
 {
