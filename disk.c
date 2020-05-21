@@ -27,7 +27,6 @@ void restoreFromDisk()
 
         for(int j = 0; j < DEFAULT_DIR_SIZE; j++)
         {
-            printf("j = %d\n", j);
             entry *newEntry = malloc(sizeof(entry));
             if(newEntry == NULL){
                 return;
@@ -39,7 +38,6 @@ void restoreFromDisk()
                 return;
             }
             newEntry->name = removePadding(buffer, '/', false);
-            printf("name = %s\n", buffer);
 
             buffer = calloc(1, 11);
             if(fgets(buffer, 11, fp) == NULL)
@@ -47,7 +45,6 @@ void restoreFromDisk()
                 return;
             }
             newEntry->size = atoi(buffer);
-            printf("size = %s\n", buffer);
 
             buffer = calloc(1, 13);
             if(fgets(buffer, 13, fp) == NULL)
@@ -55,7 +52,6 @@ void restoreFromDisk()
                 return;
             }
             newEntry->modTime = atoi(buffer);
-            printf("modTime = %s\n", buffer);
 
             buffer = calloc(1, 13);
             if(fgets(buffer, 13, fp) == NULL)
@@ -63,7 +59,6 @@ void restoreFromDisk()
                 return;
             }
             newEntry->accessTime = atoi(buffer);
-            printf("accessTime = %s\n", buffer);
 
             buffer = calloc(1, 2);
             if(fgets(buffer, 2, fp) == NULL)
@@ -71,7 +66,6 @@ void restoreFromDisk()
                 return;
             }
             newEntry->type = atoi(buffer);
-            printf("type = %s\n", buffer);
 
             free(buffer);
 
@@ -82,7 +76,6 @@ void restoreFromDisk()
                 { 
                     return;
                 }
-                printf("data = %s\n", newEntry->data);
             }else if(newEntry->type == TYPE_DIR)
             {
                 newEntry->size = sizeof(entry) * DEFAULT_DIR_SIZE;
@@ -97,7 +90,6 @@ void restoreFromDisk()
                 memcpy(&queue[inputIndex], newEntry, sizeof(entry));
                 inputIndex++;
             }
-            printf("---------------NEW FOLDER---------------\n");
 
             memcpy(&data[j], newEntry, sizeof(entry));
         }
