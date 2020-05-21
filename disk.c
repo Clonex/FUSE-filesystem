@@ -72,7 +72,7 @@ void restoreFromDisk()
             if(newEntry->type == TYPE_FILE)
             {
                 newEntry->data = calloc(1, newEntry->size + 1); // +1 in case the size is 0
-                if(fread(newEntry->data, 1, newEntry->size, fp) == NULL) // fread reads past newline, which our data might include
+                if(fread(newEntry->data, 1, newEntry->size, fp) != newEntry->size) // fread reads past newline, which our data might include
                 { 
                     return;
                 }
